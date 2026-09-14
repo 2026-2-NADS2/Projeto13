@@ -1,0 +1,193 @@
+-- ============================================================
+-- KFKA - Plataforma de Acompanhamento Escolar
+-- Schema do banco de dados (MySQL 8+)
+-- Disciplina: Banco de Dados
+-- ============================================================
+
+CREATE DATABASE IF NOT EXISTS kfka
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+
+USE kfka;
+
+-- ============================================================
+-- 1. TABELAS BASE (sem dependências de outras tabelas novas)
+-- ============================================================
+
+CREATE TABLE usuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(150) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    senha_hash VARCHAR(255) NOT NULL,
+    perfil ENUM('administrador', 'professor', 'responsavel') NOT NULL,
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE turma (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    serie VARCHAR(20) NOT NULL,
+    ano_letivo YEAR NOT NULL,
+    UNIQUE KEY uk_turma_nome_ano (nome, ano_letivo)
+);
+
+CREATE TABLE area_disciplina (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE bimestre (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    numero TINYINT NOT NULL,
+    ano_letivo YEAR NOT NULL,
+    data_abertura DATETIME NOT NULL,
+    data_encerramento DATETIME NOT NULL,
+    UNIQUE KEY uk_bimestre_numero_ano (numero, ano_letivo),
+    CHECK (numero BETWEEN 1 AND 4)
+);
+
+CREATE TABLE tag (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- ============================================================
+-- 2. TABELAS QUE DEPENDEM DAS ACIMA
+-- ============================================================
+
+CREATE TABLE disciplina (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    area_id INT NOT NULL,
+    UNIQUE KEY uk_disciplina_nome_area (nome, area_id),
+    FOREIGN KEY (area_id) REFERENCES area_disciplina(id)
+);
+
+CREATE TABLE aluno (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(150) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    turma_id INT NULL,
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (turma_id) REFERENCES turma(id)
+);
+
+-- ============================================================
+-- 3. TABELAS DE ASSOCIAÇÃO (muitos-para-muitos)
+-- ============================================================
+
+CREATE TABLE turma_disc_prof (
+    turma_id INT NOT NULL,
+    disciplina_id INT NOT NULL,
+    professor_id INT NOT NULL,
+    PRIMARY KEY (turma_id, disciplina_id),
+    FOREIGN KEY (turma_id) REFERENCES turma(id),
+    FOREIGN KEY (disciplina_id) REFERENCES disciplina(id),
+    FOREIGN KEY (professor_id) REFERENCES usuario(id)
+);
+
+CREATE TABLE aluno_responsavel (
+    aluno_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    PRIMARY KEY (aluno_id, usuario_id),
+    FOREIGN KEY (aluno_id) REFERENCES aluno(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+);
+
+-- ============================================================
+-- 4. TABELA CENTRAL DO SISTEMA
+-- ============================================================
+
+CREATE TABLE acompanhamento (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    aluno_id INT NOT NULL,
+    turma_id INT NOT NULL,
+    disciplina_id INT NOT NULL,
+    professor_id INT NOT NULL,
+    bimestre_id INT NOT NULL,
+    descricao TEXT NOT NULL,
+    media DECIMAL(4,2) NOT NULL,
+    status ENUM('rascunho', 'enviado_revisao', 'em_revisao', 'publicado', 'devolvido', 'cancelado')
+        NOT NULL DEFAULT 'rascunho',
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_acomp_aluno_disc_bimestre (aluno_id, disciplina_id, bimestre_id),
+    CHECK (media BETWEEN 0 AND 10),
+    FOREIGN KEY (aluno_id) REFERENCES aluno(id),
+    FOREIGN KEY (turma_id) REFERENCES turma(id),
+    FOREIGN KEY (disciplina_id) REFERENCES disciplina(id),
+    FOREIGN KEY (professor_id) REFERENCES usuario(id),
+    FOREIGN KEY (bimestre_id) REFERENCES bimestre(id)
+);
+
+CREATE TABLE acomp_tag (
+    acompanhamento_id INT NOT NULL,
+    tag_id INT NOT NULL,
+    PRIMARY KEY (acompanhamento_id, tag_id),
+    FOREIGN KEY (acompanhamento_id) REFERENCES acompanhamento(id),
+    FOREIGN KEY (tag_id) REFERENCES tag(id)
+);
+
+CREATE TABLE historico (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    acompanhamento_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    estado_anterior ENUM('rascunho', 'enviado_revisao', 'em_revisao', 'publicado', 'devolvido', 'cancelado') NULL,
+    estado_posterior ENUM('rascunho', 'enviado_revisao', 'em_revisao', 'publicado', 'devolvido', 'cancelado') NOT NULL,
+    data_hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (acompanhamento_id) REFERENCES acompanhamento(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+);
+
+-- ============================================================
+-- 5. ÍNDICES
+-- Observação: FKs e colunas UNIQUE já recebem índice automático
+-- do InnoDB. Os índices abaixo cobrem filtros que NÃO são FK/UNIQUE
+-- e que aparecem com frequência nas consultas do sistema.
+-- ============================================================
+
+-- RF08: Pai/Responsável só enxerga acompanhamentos com status = 'publicado'.
+-- Sem índice, cada consulta varreria a tabela inteira.
+CREATE INDEX idx_acompanhamento_status ON acompanhamento (status);
+
+-- Índice composto: a consulta real do Pai combina "meu filho" (aluno_id)
+-- + "só publicado" (status) na mesma busca. Um índice composto nessa
+-- ordem atende as duas condições de uma vez, mais eficiente que dois
+-- índices separados.
+CREATE INDEX idx_acompanhamento_aluno_status ON acompanhamento (aluno_id, status);
+
+-- RF07: auditoria consulta sempre "todas as mudanças de UM acompanhamento,
+-- em ordem cronológica". O índice cobre o filtro (acompanhamento_id) e a
+-- ordenação (data_hora) numa estrutura só.
+CREATE INDEX idx_historico_acomp_data ON historico (acompanhamento_id, data_hora);
+
+-- ============================================================
+-- 6. VIEW
+-- Empacota o JOIN de 6 tabelas usado sempre que o Pai/Responsável
+-- consulta relatórios publicados (RF08/RF09), evitando repetir esse
+-- JOIN em várias rotas do backend. Aproveita o índice
+-- idx_acompanhamento_status criado acima.
+-- ============================================================
+
+CREATE VIEW vw_relatorio_publicado AS
+SELECT
+    a.id AS acompanhamento_id,
+    a.aluno_id,
+    al.nome AS aluno_nome,
+    t.nome AS turma_nome,
+    d.nome AS disciplina_nome,
+    p.nome AS professor_nome,
+    b.numero AS bimestre_numero,
+    b.ano_letivo,
+    a.descricao,
+    a.media,
+    a.atualizado_em AS publicado_em
+FROM acompanhamento a
+JOIN aluno al ON al.id = a.aluno_id
+JOIN turma t ON t.id = a.turma_id
+JOIN disciplina d ON d.id = a.disciplina_id
+JOIN usuario p ON p.id = a.professor_id
+JOIN bimestre b ON b.id = a.bimestre_id
+WHERE a.status = 'publicado';

@@ -22,11 +22,7 @@
 </p>
 
 
-De um a dois parágrafos sobre o que é seu projeto e o que ele faz.
-<br><br>
-Meu projeto ajuda estudantes FECAP a configurarem seus githubs.
-<br><br>
-May the force be with you!
+O KFKA é uma plataforma web de acompanhamento escolar voltada para escolas de Ensino Fundamental, desenvolvida como Projeto Interdisciplinar do curso de ADS. Ela conecta três perfis de usuário — Administrador, Professor e Pai/Responsável — em um fluxo estruturado de registro, revisão e publicação de relatórios bimestrais sobre o desempenho dos alunos. O Professor registra o acompanhamento (descrição, média e tags) de cada aluno por disciplina e bimestre, podendo salvar como rascunho antes de enviar para revisão; o Administrador gerencia os cadastros do sistema (alunos, turmas, disciplinas, professores, responsáveis), controla os períodos bimestrais e revisa/publica os relatórios, podendo devolvê-los para ajustes; e o Pai/Responsável consulta apenas os relatórios já publicados dos alunos vinculados a ele, podendo exportá-los em PDF e registrar ciência de leitura.
 <br><br>
 
 ## 🛠 Estrutura de pastas

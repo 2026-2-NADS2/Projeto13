@@ -16,7 +16,7 @@ Vide tutoriais do PI.
 
 ## Integrantes: <a href="https://www.linkedin.com/in/andré-seiji-shiroma">André Seiji Shiroma</a>, <a href="https://www.linkedin.com/in/victorbarq/">Marcos Almeida Daloia</a>, <a href="https://www.linkedin.com/in/victorbarq/">Clayton Santos Ferreira</a>, <a href="https://www.linkedin.com/in/victorbarq/">Enzo Mancio</a>
 
-## Professores Orientadores: <a href="https://www.linkedin.com/in/victorbarq/">Dr. Victor Von Doom</a>, <a href="https://www.linkedin.com/in/victorbarq/">Me. Saitama</a>, <a href="https://www.linkedin.com/in/victorbarq/">Dr. Strange</a>, <a href="https://www.linkedin.com/in/victorbarq/">Me. Yoda</a>, <a href="https://www.linkedin.com/in/victorbarq/">Dr. Gero</a>
+## Professores Orientadores: <a href="https://www.linkedin.com/in/victorbarq/">Ronaldo Araujo Pinto</a>, <a href="https://www.linkedin.com/in/victorbarq/">José Carlos Buesso Junior</a>, <a href="https://www.linkedin.com/in/victorbarq/">Eduardo Savino Gomes</a>, <a href="https://www.linkedin.com/in/victorbarq/">Me. Yoda</a>, <a href="https://www.linkedin.com/in/victorbarq/">Dr. Gero</a>
 
 ## Descrição
 

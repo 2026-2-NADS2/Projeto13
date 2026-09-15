@@ -14,7 +14,7 @@ Vide tutoriais do PI.
 
 ## Nova Stark
 
-## Integrantes: <a href="https://www.linkedin.com/in/victorbarq/">André Seiji Shiroma</a>, <a href="https://www.linkedin.com/in/victorbarq/">Marcos Almeida Daloia</a>, <a href="https://www.linkedin.com/in/victorbarq/">Clayton Santos Ferreira</a>, <a href="https://www.linkedin.com/in/victorbarq/">Enzo Mancio</a>, <a href="https://www.linkedin.com/in/victorbarq/">Roronoa Zoro</a>
+## Integrantes: <a href="https://www.linkedin.com/in/andré-seiji-shiroma">André Seiji Shiroma</a>, <a href="https://www.linkedin.com/in/victorbarq/">Marcos Almeida Daloia</a>, <a href="https://www.linkedin.com/in/victorbarq/">Clayton Santos Ferreira</a>, <a href="https://www.linkedin.com/in/victorbarq/">Enzo Mancio</a>
 
 ## Professores Orientadores: <a href="https://www.linkedin.com/in/victorbarq/">Dr. Victor Von Doom</a>, <a href="https://www.linkedin.com/in/victorbarq/">Me. Saitama</a>, <a href="https://www.linkedin.com/in/victorbarq/">Dr. Strange</a>, <a href="https://www.linkedin.com/in/victorbarq/">Me. Yoda</a>, <a href="https://www.linkedin.com/in/victorbarq/">Dr. Gero</a>
 

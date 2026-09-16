@@ -1,0 +1,53 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0b0b1a;
+  color: #f2f2f2;
+  font-family: 'Courier New', monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.tela {
+  text-align: center;
+}
+
+h1 {
+  letter-spacing: 4px;
+  margin-bottom: 4px;
+  color: #7CFC00;
+}
+
+.instrucoes {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 12px;
+}
+
+canvas {
+  background: #000;
+  border: 2px solid #7CFC00;
+  display: block;
+  margin: 0 auto;
+}
+
+#hud {
+  display: flex;
+  justify-content: space-between;
+  width: 800px;
+  margin: 8px auto 0;
+  font-size: 18px;
+}
+
+#mensagem {
+  margin-top: 12px;
+  font-size: 22px;
+  color: #ff5050;
+  min-height: 30px;
+}

@@ -1,0 +1,253 @@
+<!-- ============================================================
+     KFKA - Plataforma de Acompanhamento Escolar
+     Tela: Minha conta (página 4 de 4 do Professor)
+     Descrição: mostra os dados da conta do professor logado e as
+     turmas/disciplinas às quais ele está vinculado, permite trocar
+     a senha e explica as responsabilidades no uso dos dados dos
+     alunos (privacidade/LGPD).
+
+     Fluxo de páginas do Professor:
+       1. professor/inicio.html         -> visão geral
+       2. professor/turmas.html         -> escolhe uma turma e vê os alunos
+       3. professor/acompanhamento.html -> registra ou edita um acompanhamento
+       4. professor/conta.html          -> dados da conta (esta página)
+
+     Mesma estrutura da página "Minha conta" do Responsável; mudam a
+     seção de vínculos (turmas em vez de alunos) e o texto de
+     privacidade (deveres de quem registra dados de alunos).
+
+     Regra de negócio: os cadastros e os vínculos com turmas são
+     mantidos pelo Administrador (RF02 e RF03). Por isso esta página
+     só EXIBE esses dados; a única alteração feita aqui é a senha.
+
+     Os dados serão preenchidos pelo JavaScript (fetch) nos
+     elementos que têm "id".
+     ============================================================ -->
+
+<!DOCTYPE html>
+
+<!-- lang="pt-br": idioma do conteúdo. -->
+<html lang="pt-br">
+
+<head>
+    <!-- UTF-8 para acentos e "ç". -->
+    <meta charset="UTF-8">
+
+    <!-- Base da responsividade: largura real da tela, sem zoom inicial. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Texto da aba do navegador. -->
+    <title>Minha conta | KFKA</title>
+</head>
+
+<body>
+
+    <!-- ========================================================
+         CABEÇALHO DO SISTEMA (igual nas páginas do Professor)
+         ======================================================== -->
+    <header>
+
+        <!-- Nome do sistema (o <h1> desta página fica no <main>). -->
+        <p>KFKA</p>
+
+        <!-- Menu de navegação principal. -->
+        <nav aria-label="Menu principal">
+            <ul>
+                <li><a href="/professor/inicio.html">Início</a></li>
+                <li><a href="/professor/turmas.html">Minhas turmas</a></li>
+                <li><a href="/professor/acompanhamento.html">Novo acompanhamento</a></li>
+                <!-- aria-current="page": esta é a página atual. -->
+                <li><a href="/professor/conta.html" aria-current="page">Minha conta</a></li>
+            </ul>
+        </nav>
+
+        <!-- Área do usuário logado. -->
+        <div>
+            <!-- Preenchido pelo JavaScript com o nome do professor. -->
+            <span id="nome-usuario">Professor</span>
+
+            <!-- Logout (RF01). type="button": não envia formulário. -->
+            <button type="button" id="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <!-- ========================================================
+         CONTEÚDO PRINCIPAL
+         ======================================================== -->
+    <main>
+
+        <!-- Trilha de navegação (breadcrumb): Início > Minha conta.
+             <ol> porque a ordem dos níveis importa. -->
+        <nav aria-label="Você está em">
+            <ol>
+                <li><a href="/professor/inicio.html">Início</a></li>
+                <!-- Página atual: não é link. -->
+                <li aria-current="page">Minha conta</li>
+            </ol>
+        </nav>
+
+        <!-- Título principal da página. -->
+        <h1>Minha conta</h1>
+
+        <!-- ----------------------------------------------------
+             SEÇÃO 1: DADOS DA CONTA
+             ---------------------------------------------------- -->
+        <!-- aria-labelledby liga a seção ao seu título <h2>. -->
+        <section aria-labelledby="titulo-dados">
+
+            <h2 id="titulo-dados">Meus dados</h2>
+
+            <!-- <dl> (lista de descrição): pares nome -> valor.
+                 <dt> é o nome do campo e <dd> é o valor, preenchido
+                 pelo JavaScript. Os campos vêm da tabela usuario. -->
+            <dl>
+                <div>
+                    <dt>Nome</dt>
+                    <dd id="conta-nome">-</dd>
+                </div>
+                <div>
+                    <dt>E-mail</dt>
+                    <dd id="conta-email">-</dd>
+                </div>
+            </dl>
+
+            <!-- Explica por que os dados não são editáveis aqui e o que
+                 fazer para corrigi-los. -->
+            <p>Para corrigir seu nome ou e-mail, entre em contato com a coordenação da escola.</p>
+        </section>
+
+        <!-- ----------------------------------------------------
+             SEÇÃO 2: TURMAS VINCULADAS
+             Vínculos da tabela turma_disc_prof: cada item é um par
+             turma + disciplina que o professor leciona.
+             ---------------------------------------------------- -->
+        <section aria-labelledby="titulo-vinculos">
+
+            <h2 id="titulo-vinculos">Turmas e disciplinas vinculadas</h2>
+
+            <!-- Lista preenchida pelo JavaScript: um <li> por vínculo,
+                 por exemplo "5º A - Matemática (2026)". -->
+            <ul id="conta-turmas">
+                <li>Carregando...</li>
+            </ul>
+
+            <!-- Os vínculos são definidos pelo Administrador (RF03). -->
+            <p>Alguma turma está faltando ou aparece por engano? Avise a coordenação da escola.</p>
+        </section>
+
+        <!-- ----------------------------------------------------
+             SEÇÃO 3: ALTERAR SENHA
+             Formulário com validação antes do envio (mesmo padrão
+             do login): o JavaScript confere os campos e mostra os
+             erros; o backend confere tudo de novo.
+             ---------------------------------------------------- -->
+        <section aria-labelledby="titulo-senha">
+
+            <h2 id="titulo-senha">Alterar senha</h2>
+
+            <!-- novalidate: desliga os balões de erro do navegador;
+                 as mensagens são exibidas pelo nosso JavaScript. -->
+            <form id="form-senha" novalidate>
+
+                <!-- Mensagem geral do formulário: sucesso ou erro.
+                     role="alert": lida assim que aparece.
+                     hidden: começa escondida. -->
+                <div id="mensagem-senha" role="alert" hidden></div>
+
+                <!-- Campo: senha atual.
+                     Pedir a senha atual impede que outra pessoa troque a
+                     senha usando um computador que ficou logado (por
+                     exemplo, o computador da sala dos professores). -->
+                <div>
+                    <label for="senha-atual">Senha atual</label>
+
+                    <!-- type="password": esconde os caracteres.
+                         autocomplete="current-password": o gerenciador de
+                         senhas pode preencher a senha salva.
+                         required: campo obrigatório.
+                         aria-describedby: liga o campo ao <span> de erro. -->
+                    <input
+                        type="password"
+                        id="senha-atual"
+                        name="senha_atual"
+                        autocomplete="current-password"
+                        required
+                        aria-describedby="erro-senha-atual"
+                    >
+                    <span id="erro-senha-atual"></span>
+                </div>
+
+                <!-- Campo: nova senha. -->
+                <div>
+                    <label for="senha-nova">Nova senha</label>
+
+                    <!-- autocomplete="new-password": avisa ao navegador que
+                         é uma senha NOVA; ele pode sugerir uma senha forte.
+                         minlength="8": tamanho mínimo (o JS e o backend
+                         também conferem).
+                         aria-describedby liga o campo às regras e ao erro. -->
+                    <input
+                        type="password"
+                        id="senha-nova"
+                        name="senha_nova"
+                        autocomplete="new-password"
+                        minlength="8"
+                        required
+                        aria-describedby="regras-senha erro-senha-nova"
+                    >
+
+                    <!-- Regras mostradas ANTES de o usuário errar. -->
+                    <small id="regras-senha">Mínimo de 8 caracteres, com pelo menos uma letra e um número.</small>
+                    <span id="erro-senha-nova"></span>
+                </div>
+
+                <!-- Campo: confirmação da nova senha (o JS confere se é
+                     igual à nova senha). -->
+                <div>
+                    <label for="senha-confirmacao">Confirme a nova senha</label>
+                    <input
+                        type="password"
+                        id="senha-confirmacao"
+                        name="senha_confirmacao"
+                        autocomplete="new-password"
+                        required
+                        aria-describedby="erro-senha-confirmacao"
+                    >
+                    <span id="erro-senha-confirmacao"></span>
+                </div>
+
+                <!-- Envia o formulário (evento "submit"). -->
+                <button type="submit">Salvar nova senha</button>
+            </form>
+        </section>
+
+        <!-- ----------------------------------------------------
+             SEÇÃO 4: PRIVACIDADE (LGPD)
+             Para o professor, o foco é a RESPONSABILIDADE: ele lida
+             com dados de crianças e precisa saber como tratá-los.
+             ---------------------------------------------------- -->
+        <section aria-labelledby="titulo-privacidade">
+
+            <h2 id="titulo-privacidade">Privacidade e uso dos dados dos alunos</h2>
+
+            <!-- Texto fixo (não vem da API), em linguagem simples. -->
+            <p>Você tem acesso a dados de crianças, que a Lei Geral de Proteção de Dados (Lei nº 13.709/2018) protege de forma especial. Ao usar a KFKA:</p>
+
+            <ul>
+                <li><strong>Acesso restrito:</strong> você vê apenas os alunos das turmas vinculadas a você.</li>
+                <li><strong>Finalidade:</strong> use os dados somente para o acompanhamento escolar; não os copie para planilhas, aplicativos de mensagem ou outros sistemas.</li>
+                <li><strong>Registro mínimo:</strong> nos acompanhamentos, descreva o desenvolvimento escolar e evite informações pessoais, familiares ou de saúde que não sejam necessárias.</li>
+                <li><strong>Rastreabilidade:</strong> os registros e as alterações ficam gravados no histórico do sistema, com autor e data.</li>
+                <li><strong>Sessão:</strong> em computadores compartilhados, use sempre o botão "Sair" ao terminar.</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- Rodapé da página. -->
+    <footer>
+        <p>KFKA - Plataforma de Acompanhamento Escolar</p>
+    </footer>
+
+</body>
+</html>

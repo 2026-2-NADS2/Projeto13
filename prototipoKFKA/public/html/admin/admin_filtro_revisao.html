@@ -1,0 +1,264 @@
+<!-- ============================================================
+     KFKA - Plataforma de Acompanhamento Escolar
+     Tela: Revisão (página 2 de 4 do Administrador)
+     Descrição: lista de TODOS os acompanhamentos da escola, com
+     filtros e paginação. É daqui que o Administrador escolhe o
+     registro que vai revisar (RF06 e RF10 do documento do PI).
+
+     Fluxo de páginas do Administrador:
+       1. admin/inicio.html  -> visão geral
+       2. admin/revisao.html -> lista de acompanhamentos (esta página)
+       3. admin/revisar.html -> revisa um acompanhamento e decide
+       4. admin/conta.html   -> dados da conta, senha e privacidade
+
+     Como se chega aqui: pelo menu "Revisão" ou pelo link "Ver todos
+     os acompanhamentos" do painel. Ao abrir, o filtro de status já
+     vem em "Enviado para revisão", porque são os registros que
+     precisam de atenção.
+     Daqui, o link "Revisar" de cada linha leva à página 3.
+
+     Paginação: a API devolve um "pedaço" por vez (ex.: 20 por
+     página), atendendo ao requisito de desempenho do PI. Os filtros
+     usam colunas com índice no banco (ex.: idx_acompanhamento_status).
+
+     Os dados serão preenchidos pelo JavaScript (fetch) nos
+     elementos que têm "id".
+     ============================================================ -->
+
+<!DOCTYPE html>
+
+<!-- lang="pt-br": idioma do conteúdo. -->
+<html lang="pt-br">
+
+<head>
+    <!-- UTF-8 para acentos e "ç". -->
+    <meta charset="UTF-8">
+
+    <!-- Base da responsividade: largura real da tela, sem zoom inicial. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Texto da aba do navegador. -->
+    <title>Revisão de acompanhamentos | KFKA</title>
+</head>
+
+<body>
+
+    <!-- ========================================================
+         CABEÇALHO DO SISTEMA (igual nas páginas do Administrador)
+         ======================================================== -->
+    <header>
+
+        <!-- Nome do sistema (o <h1> desta página fica no <main>). -->
+        <p>KFKA</p>
+
+        <!-- <nav>: menu de navegação principal.
+             aria-label dá um nome ao menu para o leitor de tela. -->
+        <nav aria-label="Menu principal">
+            <!-- Menu é uma lista de links: <ul> + <li>. -->
+            <ul>
+                <li><a href="/admin/inicio.html">Início</a></li>
+                <!-- aria-current="page": esta é a página atual. -->
+                <li><a href="/admin/revisao.html" aria-current="page">Revisão</a></li>
+                <li><a href="/admin/conta.html">Minha conta</a></li>
+            </ul>
+        </nav>
+
+        <!-- Área do usuário logado. -->
+        <div>
+            <!-- Preenchido pelo JavaScript com o nome do administrador. -->
+            <span id="nome-usuario">Administrador</span>
+
+            <!-- Logout (RF01). type="button": não envia formulário. -->
+            <button type="button" id="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <!-- ========================================================
+         CONTEÚDO PRINCIPAL
+         ======================================================== -->
+    <main>
+
+        <!-- Trilha de navegação (breadcrumb): mostra onde o usuário
+             está e permite voltar um nível. <ol> porque a ordem
+             dos itens importa. -->
+        <nav aria-label="Você está em">
+            <ol>
+                <li><a href="/admin/inicio.html">Início</a></li>
+                <!-- Página atual: não é link. -->
+                <li aria-current="page">Revisão</li>
+            </ol>
+        </nav>
+
+        <!-- Título principal da página. -->
+        <h1>Revisão de acompanhamentos</h1>
+
+        <!-- ----------------------------------------------------
+             SEÇÃO 1: FILTROS
+             ---------------------------------------------------- -->
+        <!-- aria-labelledby liga a seção ao seu título <h2>. -->
+        <section aria-labelledby="titulo-filtros">
+
+            <h2 id="titulo-filtros">Filtrar acompanhamentos</h2>
+
+            <!-- Formulário de filtros. O JavaScript intercepta o envio
+                 e refaz a busca na API, atualizando a tabela SEM
+                 recarregar a página.
+                 role="search": área de busca/filtro para o leitor de tela. -->
+            <form id="form-filtros" role="search">
+
+                <!-- Filtro por status. -->
+                <div>
+                    <!-- Rótulo ligado ao <select> pelo for/id. -->
+                    <label for="filtro-status">Status</label>
+
+                    <!-- Os "value" são iguais ao ENUM "status" da tabela
+                         acompanhamento (schema.sql). "Rascunho" não aparece
+                         porque rascunhos são particulares do professor:
+                         a coordenação só vê o que foi enviado.
+                         selected: opção que já vem marcada ao abrir. -->
+                    <select id="filtro-status" name="status">
+                        <option value="">Todos</option>
+                        <option value="enviado_revisao" selected>Enviado para revisão</option>
+                        <option value="em_revisao">Em revisão</option>
+                        <option value="devolvido">Devolvido para ajustes</option>
+                        <option value="publicado">Publicado</option>
+                        <option value="cancelado">Cancelado</option>
+                    </select>
+                </div>
+
+                <!-- Filtro por turma. -->
+                <div>
+                    <label for="filtro-turma">Turma</label>
+
+                    <!-- Opções criadas pelo JS a partir da tabela turma. -->
+                    <select id="filtro-turma" name="turma">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+
+                <!-- Filtro por disciplina. -->
+                <div>
+                    <label for="filtro-disciplina">Disciplina</label>
+
+                    <!-- Opções criadas pelo JS a partir da tabela disciplina. -->
+                    <select id="filtro-disciplina" name="disciplina">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+
+                <!-- Filtro por professor. -->
+                <div>
+                    <label for="filtro-professor">Professor(a)</label>
+
+                    <!-- Opções criadas pelo JS: usuários com perfil "professor". -->
+                    <select id="filtro-professor" name="professor">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+
+                <!-- Filtro por bimestre. -->
+                <div>
+                    <label for="filtro-bimestre">Bimestre</label>
+
+                    <!-- Valores 1 a 4 (coluna "numero" da tabela bimestre). -->
+                    <select id="filtro-bimestre" name="bimestre">
+                        <option value="">Todos</option>
+                        <option value="1">1º bimestre</option>
+                        <option value="2">2º bimestre</option>
+                        <option value="3">3º bimestre</option>
+                        <option value="4">4º bimestre</option>
+                    </select>
+                </div>
+
+                <!-- Busca por nome do aluno. -->
+                <div>
+                    <label for="filtro-aluno">Nome do aluno</label>
+
+                    <!-- type="search": campo de busca (em alguns navegadores
+                         mostra um "x" para limpar o texto).
+                         autocomplete="off": não sugere textos digitados antes,
+                         já que são nomes de crianças (privacidade em
+                         computadores compartilhados). -->
+                    <input type="search" id="filtro-aluno" name="aluno" autocomplete="off">
+                </div>
+
+                <!-- type="submit": aplica os filtros. -->
+                <button type="submit">Filtrar</button>
+
+                <!-- type="reset": volta os campos aos valores iniciais. -->
+                <button type="reset">Limpar filtros</button>
+            </form>
+        </section>
+
+        <!-- ----------------------------------------------------
+             SEÇÃO 2: RESULTADOS
+             ---------------------------------------------------- -->
+        <section aria-labelledby="titulo-resultados">
+
+            <h2 id="titulo-resultados">Resultados</h2>
+
+            <!-- Resumo preenchido pelo JS (ex.: "8 acompanhamentos
+                 encontrados"). aria-live="polite": o leitor de tela
+                 anuncia a mudança sem interromper o usuário. -->
+            <p id="resumo-resultados" aria-live="polite"></p>
+
+            <!-- Tabela de acompanhamentos. -->
+            <table>
+                <!-- Título da tabela para o leitor de tela. -->
+                <caption>Acompanhamentos da escola</caption>
+
+                <thead>
+                    <tr>
+                        <!-- scope="col": cabeçalho vale para a coluna inteira. -->
+                        <th scope="col">Aluno</th>
+                        <th scope="col">Turma</th>
+                        <th scope="col">Disciplina</th>
+                        <th scope="col">Professor(a)</th>
+                        <th scope="col">Bimestre</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Atualizado em</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+
+                <!-- Corpo preenchido pelo JavaScript. Na coluna "Ações",
+                     cada linha terá o link "Revisar" (ou "Ver", quando já
+                     publicado ou cancelado), que abre a página 3:
+                       /admin/revisar.html?id=42
+                     Se não houver resultados, o JS escreve aqui
+                     "Nenhum acompanhamento encontrado"; se a API falhar,
+                     escreve a mensagem de erro. -->
+                <tbody id="tabela-acompanhamentos">
+                    <tr>
+                        <!-- colspan="8": ocupa as 8 colunas. -->
+                        <td colspan="8">Carregando...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Paginação. É um <nav> porque serve para navegar entre as
+                 páginas de resultados; o aria-label diferencia este <nav>
+                 dos outros da página. -->
+            <nav aria-label="Paginação dos acompanhamentos">
+
+                <!-- Começa desabilitado (disabled): ao abrir, estamos na
+                     página 1. O JavaScript habilita quando fizer sentido. -->
+                <button type="button" id="pagina-anterior" disabled>Anterior</button>
+
+                <!-- Indicador preenchido pelo JS (ex.: "Página 1 de 3"). -->
+                <span id="pagina-atual">Página 1</span>
+
+                <!-- O JS desabilita na última página. -->
+                <button type="button" id="pagina-proxima">Próxima</button>
+            </nav>
+        </section>
+
+    </main>
+
+    <!-- Rodapé da página. -->
+    <footer>
+        <p>KFKA - Plataforma de Acompanhamento Escolar</p>
+    </footer>
+
+</body>
+</html>

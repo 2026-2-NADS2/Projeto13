@@ -1,0 +1,237 @@
+<!-- ============================================================
+     KFKA - Plataforma de Acompanhamento Escolar
+     Tela: Relatórios do Responsável (página 2 de 4 do perfil)
+     Descrição: lista COMPLETA dos relatórios publicados dos alunos
+     vinculados ao responsável, com filtros por aluno, ano letivo,
+     bimestre e disciplina, e com paginação (RF08 do documento do PI).
+
+     Como se chega aqui:
+     - pelo menu "Relatórios";
+     - pelo link "Ver todos os relatórios" do painel;
+     - pelo link "Ver relatórios" de um aluno no painel. Nesse caso
+       a URL traz o aluno escolhido (ex.: ?aluno=15) e o JavaScript
+       já deixa o filtro "Aluno" selecionado.
+     Daqui, o link "Ver relatório" de cada linha leva à página 3.
+
+     Paginação: em vez de trazer todos os relatórios de uma vez, a
+     API devolve um "pedaço" por vez (ex.: 10 por página). Isso
+     atende ao requisito de desempenho do PI (paginação).
+
+     Os dados serão preenchidos pelo JavaScript (fetch) nos
+     elementos que têm "id".
+     ============================================================ -->
+
+<!DOCTYPE html>
+
+<!-- lang="pt-br": idioma do conteúdo. -->
+<html lang="pt-br">
+
+<head>
+    <!-- UTF-8 para acentos e "ç". -->
+    <meta charset="UTF-8">
+
+    <!-- Base da responsividade: largura real da tela, sem zoom inicial. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Texto da aba do navegador. -->
+    <title>Relatórios | KFKA</title>
+</head>
+
+<body>
+
+    <!-- ========================================================
+         CABEÇALHO DO SISTEMA (igual nas páginas do Responsável)
+         ======================================================== -->
+    <header>
+
+        <!-- Nome do sistema (o <h1> desta página fica no <main>). -->
+        <p>KFKA</p>
+
+        <!-- Menu de navegação principal. -->
+        <nav aria-label="Menu principal">
+            <ul>
+                <li><a href="/responsavel/inicio.html">Início</a></li>
+                <!-- aria-current="page": esta é a página atual. -->
+                <li><a href="/responsavel/relatorios.html" aria-current="page">Relatórios</a></li>
+                <li><a href="/responsavel/conta.html">Minha conta</a></li>
+            </ul>
+        </nav>
+
+        <!-- Área do usuário logado. -->
+        <div>
+            <!-- Preenchido pelo JavaScript com o nome do responsável. -->
+            <span id="nome-usuario">Responsável</span>
+
+            <!-- Logout (RF01). type="button": não envia formulário. -->
+            <button type="button" id="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <!-- ========================================================
+         CONTEÚDO PRINCIPAL
+         ======================================================== -->
+    <main>
+
+        <!-- "Trilha de navegação" (breadcrumb): mostra onde o usuário
+             está dentro do sistema e permite voltar um nível.
+             É um <nav> separado, com aria-label próprio, para o leitor
+             de tela não confundir com o menu principal.
+             <ol> (lista ORDENADA) porque a ordem dos itens importa:
+             Início vem antes de Relatórios. -->
+        <nav aria-label="Você está em">
+            <ol>
+                <li><a href="/responsavel/inicio.html">Início</a></li>
+                <!-- O último item é a página atual, por isso não é link. -->
+                <li aria-current="page">Relatórios</li>
+            </ol>
+        </nav>
+
+        <!-- Título principal da página. -->
+        <h1>Relatórios de acompanhamento</h1>
+
+        <!-- ----------------------------------------------------
+             SEÇÃO 1: FILTROS
+             ---------------------------------------------------- -->
+        <!-- aria-labelledby liga a seção ao seu título <h2>. -->
+        <section aria-labelledby="titulo-filtros">
+
+            <h2 id="titulo-filtros">Filtrar relatórios</h2>
+
+            <!-- Formulário de filtros. O JavaScript intercepta o envio
+                 e refaz a busca na API com os valores escolhidos.
+                 role="search": área de busca/filtro para o leitor de tela. -->
+            <form id="form-filtros" role="search">
+
+                <!-- Filtro por aluno. -->
+                <div>
+                    <!-- Rótulo ligado ao <select> pelo for/id. -->
+                    <label for="filtro-aluno">Aluno</label>
+
+                    <!-- Os alunos dependem de quem está logado, por isso o
+                         JavaScript cria os <option> a partir da API.
+                         Aqui fica só a opção "Todos" (value="" = sem filtro). -->
+                    <select id="filtro-aluno" name="aluno">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+
+                <!-- Filtro por ano letivo. -->
+                <div>
+                    <label for="filtro-ano">Ano letivo</label>
+
+                    <!-- type="number": campo numérico (teclado numérico no celular).
+                         min e max: limitam os valores aceitos.
+                         value: valor inicial (ano atual). -->
+                    <input type="number" id="filtro-ano" name="ano_letivo" min="2020" max="2100" value="2026">
+                </div>
+
+                <!-- Filtro por bimestre. -->
+                <div>
+                    <label for="filtro-bimestre">Bimestre</label>
+
+                    <!-- Valores 1 a 4 batem com a coluna "numero" da
+                         tabela bimestre (CHECK numero BETWEEN 1 AND 4). -->
+                    <select id="filtro-bimestre" name="bimestre">
+                        <option value="">Todos</option>
+                        <option value="1">1º bimestre</option>
+                        <option value="2">2º bimestre</option>
+                        <option value="3">3º bimestre</option>
+                        <option value="4">4º bimestre</option>
+                    </select>
+                </div>
+
+                <!-- Filtro por disciplina. -->
+                <div>
+                    <label for="filtro-disciplina">Disciplina</label>
+
+                    <!-- As disciplinas vêm do banco (tabela disciplina),
+                         por isso os <option> também são criados pelo JS. -->
+                    <select id="filtro-disciplina" name="disciplina">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+
+                <!-- type="submit": aplica os filtros. -->
+                <button type="submit">Filtrar</button>
+
+                <!-- type="reset": botão nativo do HTML que volta todos os
+                     campos do formulário aos valores iniciais. -->
+                <button type="reset">Limpar filtros</button>
+            </form>
+        </section>
+
+        <!-- ----------------------------------------------------
+             SEÇÃO 2: RESULTADOS
+             ---------------------------------------------------- -->
+        <section aria-labelledby="titulo-resultados">
+
+            <h2 id="titulo-resultados">Resultados</h2>
+
+            <!-- Resumo da busca, preenchido pelo JS
+                 (ex.: "12 relatórios encontrados").
+                 aria-live="polite": quando o texto muda, o leitor de tela
+                 anuncia a novidade assim que terminar o que estiver lendo.
+                 Assim, quem não enxerga fica sabendo que o filtro funcionou. -->
+            <p id="resumo-resultados" aria-live="polite"></p>
+
+            <!-- Tabela de relatórios publicados. As colunas seguem os
+                 campos da view vw_relatorio_publicado (schema.sql). -->
+            <table>
+                <!-- Título da tabela para o leitor de tela. -->
+                <caption>Relatórios publicados pela escola</caption>
+
+                <thead>
+                    <tr>
+                        <!-- scope="col": cabeçalho vale para a coluna inteira. -->
+                        <th scope="col">Aluno</th>
+                        <th scope="col">Disciplina</th>
+                        <th scope="col">Bimestre</th>
+                        <th scope="col">Professor</th>
+                        <th scope="col">Média</th>
+                        <th scope="col">Publicado em</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+
+                <!-- Corpo preenchido pelo JavaScript. Em cada linha, a
+                     coluna "Ações" terá o link "Ver relatório", que abre
+                     a página 3 (ex.: /responsavel/relatorio.html?id=42).
+                     Se não houver resultados, o JS escreve aqui
+                     "Nenhum relatório encontrado"; se a API falhar,
+                     escreve a mensagem de erro. -->
+                <tbody id="tabela-relatorios">
+                    <tr>
+                        <!-- colspan="7": ocupa as 7 colunas. -->
+                        <td colspan="7">Carregando...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Paginação. É um <nav> porque serve para navegar entre
+                 as páginas de resultados; o aria-label diferencia este
+                 <nav> dos outros da página. -->
+            <nav aria-label="Paginação dos relatórios">
+
+                <!-- Volta uma página. Começa desabilitado (disabled)
+                     porque, ao abrir a tela, já estamos na página 1.
+                     O JavaScript habilita quando fizer sentido. -->
+                <button type="button" id="pagina-anterior" disabled>Anterior</button>
+
+                <!-- Indicador da página atual, preenchido pelo JS
+                     (ex.: "Página 1 de 3"). -->
+                <span id="pagina-atual">Página 1</span>
+
+                <!-- Avança uma página. O JS desabilita na última. -->
+                <button type="button" id="pagina-proxima">Próxima</button>
+            </nav>
+        </section>
+
+    </main>
+
+    <!-- Rodapé da página. -->
+    <footer>
+        <p>KFKA - Plataforma de Acompanhamento Escolar</p>
+    </footer>
+
+</body>
+</html>

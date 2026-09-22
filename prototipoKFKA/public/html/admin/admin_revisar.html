@@ -1,0 +1,336 @@
+<!-- ============================================================
+     KFKA - Plataforma de Acompanhamento Escolar
+     Tela: Revisar acompanhamento (página 3 de 4 do Administrador)
+     Descrição: o Administrador lê o acompanhamento enviado pelo
+     professor, pode ALTERAR o texto, a média e as tags, e toma a
+     decisão: publicar para o responsável, devolver ao professor
+     para ajustes ou cancelar (RF06). Todas as mudanças ficam no
+     histórico, exibido no fim da página (RF07 - auditoria).
+
+     Fluxo de páginas do Administrador:
+       1. admin/inicio.html  -> visão geral
+       2. admin/revisao.html -> lista de acompanhamentos
+       3. admin/revisar.html -> revisa e decide (esta página)
+       4. admin/conta.html   -> dados da conta, senha e privacidade
+
+     Como se chega aqui: pelo link "Revisar" das páginas 1 ou 2.
+     A URL traz o id do acompanhamento (ex.: ?id=42).
+
+     Fluxo de estados (conferido pelo BACKEND):
+       enviado_revisao -> em_revisao  (quando o admin abre o registro)
+       em_revisao -> publicado   (o responsável passa a ver)
+       em_revisao -> devolvido   (volta para o professor ajustar)
+       em_revisao -> cancelado   (registro encerrado, mantido no histórico)
+     Registros já publicados ou cancelados abrem só para leitura.
+
+     Os dados serão preenchidos pelo JavaScript (fetch) nos
+     elementos que têm "id".
+     ============================================================ -->
+
+<!DOCTYPE html>
+
+<!-- lang="pt-br": idioma do conteúdo. -->
+<html lang="pt-br">
+
+<head>
+    <!-- UTF-8 para acentos e "ç". -->
+    <meta charset="UTF-8">
+
+    <!-- Base da responsividade: largura real da tela, sem zoom inicial. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Texto da aba do navegador. -->
+    <title>Revisar acompanhamento | KFKA</title>
+</head>
+
+<body>
+
+    <!-- ========================================================
+         CABEÇALHO DO SISTEMA (igual nas páginas do Administrador)
+         ======================================================== -->
+    <header>
+
+        <!-- Nome do sistema (o <h1> desta página fica no <main>). -->
+        <p>KFKA</p>
+
+        <!-- Menu de navegação principal. Nenhum item recebe
+             aria-current="page": esta página é um "detalhe" dentro
+             da seção Revisão. -->
+        <nav aria-label="Menu principal">
+            <ul>
+                <li><a href="/admin/inicio.html">Início</a></li>
+                <li><a href="/admin/revisao.html">Revisão</a></li>
+                <li><a href="/admin/conta.html">Minha conta</a></li>
+            </ul>
+        </nav>
+
+        <!-- Área do usuário logado. -->
+        <div>
+            <!-- Preenchido pelo JavaScript com o nome do administrador. -->
+            <span id="nome-usuario">Administrador</span>
+
+            <!-- Logout (RF01). type="button": não envia formulário. -->
+            <button type="button" id="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <!-- ========================================================
+         CONTEÚDO PRINCIPAL
+         ======================================================== -->
+    <main>
+
+        <!-- Trilha de navegação (breadcrumb): Início > Revisão > Revisar.
+             <ol> porque a ordem dos níveis importa. -->
+        <nav aria-label="Você está em">
+            <ol>
+                <li><a href="/admin/inicio.html">Início</a></li>
+                <li><a href="/admin/revisao.html">Revisão</a></li>
+                <!-- Página atual: não é link. -->
+                <li aria-current="page">Revisar acompanhamento</li>
+            </ol>
+        </nav>
+
+        <!-- Mensagem de carregamento/erro da página inteira.
+             role="status": o leitor de tela anuncia mudanças no texto
+             sem interromper o usuário. -->
+        <p id="mensagem-carregamento" role="status">Carregando acompanhamento...</p>
+
+        <!-- Título principal. O JS completa com os dados reais, por
+             exemplo: "Ana Souza - Matemática - 3º bimestre". -->
+        <h1 id="titulo-pagina">Revisar acompanhamento</h1>
+
+        <!-- ----------------------------------------------------
+             SEÇÃO 1: IDENTIFICAÇÃO DO REGISTRO (só leitura)
+             ---------------------------------------------------- -->
+        <!-- aria-labelledby liga a seção ao seu título <h2>. -->
+        <section aria-labelledby="titulo-identificacao">
+
+            <h2 id="titulo-identificacao">Identificação</h2>
+
+            <!-- <dl> (lista de descrição): pares nome -> valor. -->
+            <dl>
+                <div>
+                    <dt>Aluno</dt>
+                    <dd id="revisar-aluno">-</dd>
+                </div>
+                <div>
+                    <dt>Turma</dt>
+                    <dd id="revisar-turma">-</dd>
+                </div>
+                <div>
+                    <dt>Disciplina</dt>
+                    <dd id="revisar-disciplina">-</dd>
+                </div>
+                <div>
+                    <dt>Professor(a)</dt>
+                    <dd id="revisar-professor">-</dd>
+                </div>
+                <div>
+                    <dt>Bimestre</dt>
+                    <dd id="revisar-bimestre">-</dd>
+                </div>
+                <div>
+                    <dt>Status atual</dt>
+                    <dd id="revisar-status">-</dd>
+                </div>
+            </dl>
+        </section>
+
+        <!-- ----------------------------------------------------
+             SEÇÃO 2: CONTEÚDO DO ACOMPANHAMENTO (editável)
+             O Administrador pode corrigir o texto, a média e as tags
+             antes de publicar (RF06: "altera quando necessário").
+             ---------------------------------------------------- -->
+        <section aria-labelledby="titulo-conteudo">
+
+            <h2 id="titulo-conteudo">Conteúdo</h2>
+
+            <!-- novalidate: as mensagens de erro são do nosso JavaScript. -->
+            <form id="form-conteudo" novalidate>
+
+                <!-- Mensagem geral do formulário (sucesso ou erro).
+                     role="alert": lida assim que aparece.
+                     hidden: começa escondida. -->
+                <div id="mensagem-conteudo" role="alert" hidden></div>
+
+                <!-- Descrição escrita pelo professor. -->
+                <div>
+                    <label for="campo-descricao">Descrição do acompanhamento</label>
+
+                    <!-- <textarea>: texto com várias linhas.
+                         O JS preenche com o texto do professor. Quando for
+                         exibir, usa-se .value (em campo de formulário o
+                         texto nunca é interpretado como HTML).
+                         maxlength="2000": mesmo limite da tela do professor. -->
+                    <textarea
+                        id="campo-descricao"
+                        name="descricao"
+                        rows="8"
+                        maxlength="2000"
+                        required
+                        aria-describedby="erro-descricao"
+                    ></textarea>
+                    <span id="erro-descricao"></span>
+                </div>
+
+                <!-- Média. -->
+                <div>
+                    <label for="campo-media">Média do bimestre</label>
+
+                    <!-- min/max/step: mesmas regras da tela do professor e do
+                         CHECK (media BETWEEN 0 AND 10) do banco. -->
+                    <input
+                        type="number"
+                        id="campo-media"
+                        name="media"
+                        min="0"
+                        max="10"
+                        step="0.1"
+                        inputmode="decimal"
+                        required
+                        aria-describedby="erro-media"
+                    >
+                    <span id="erro-media"></span>
+                </div>
+
+                <!-- Tags: o JS cria um checkbox + label por tag, já marcando
+                     as que o professor escolheu. -->
+                <fieldset>
+                    <legend>Tags de acompanhamento</legend>
+                    <div id="lista-tags">
+                        <p>Carregando tags...</p>
+                    </div>
+                </fieldset>
+
+                <!-- Justificativa da alteração. Obrigatória SE o
+                     Administrador mudar algo: fica registrada no histórico
+                     para o professor saber o que foi alterado e por quê
+                     (auditabilidade, RF07). O JS confere se houve mudança. -->
+                <div>
+                    <label for="campo-justificativa">Justificativa da alteração</label>
+                    <textarea
+                        id="campo-justificativa"
+                        name="justificativa"
+                        rows="3"
+                        maxlength="500"
+                        aria-describedby="dica-justificativa erro-justificativa"
+                    ></textarea>
+                    <small id="dica-justificativa">Obrigatória se você alterar a descrição, a média ou as tags.</small>
+                    <span id="erro-justificativa"></span>
+                </div>
+
+                <!-- Salva as alterações sem mudar o status. -->
+                <button type="submit">Salvar alterações</button>
+            </form>
+        </section>
+
+        <!-- ----------------------------------------------------
+             SEÇÃO 3: DECISÃO (RF06)
+             Formulário separado do conteúdo: primeiro o admin ajusta
+             o texto, depois decide o destino do registro.
+             ---------------------------------------------------- -->
+        <section aria-labelledby="titulo-decisao">
+
+            <h2 id="titulo-decisao">Decisão</h2>
+
+            <form id="form-decisao" novalidate>
+
+                <!-- Mensagem geral da decisão (sucesso ou erro). -->
+                <div id="mensagem-decisao" role="alert" hidden></div>
+
+                <!-- <fieldset> + <legend>: grupo de opções com um título.
+                     O leitor de tela lê a pergunta antes de cada opção. -->
+                <fieldset>
+                    <legend>O que fazer com este acompanhamento?</legend>
+
+                    <!-- type="radio": botões de opção. Todos têm o MESMO
+                         name ("decisao"), por isso só um pode ficar marcado.
+                         O "value" é o novo status que o backend vai gravar. -->
+                    <div>
+                        <input type="radio" id="decisao-publicar" name="decisao" value="publicado" aria-describedby="erro-decisao">
+                        <label for="decisao-publicar">Publicar para o responsável</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="decisao-devolver" name="decisao" value="devolvido" aria-describedby="erro-decisao">
+                        <label for="decisao-devolver">Devolver ao professor para ajustes</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="decisao-cancelar" name="decisao" value="cancelado" aria-describedby="erro-decisao">
+                        <label for="decisao-cancelar">Cancelar este acompanhamento</label>
+                    </div>
+
+                    <!-- Erro do grupo (ex.: "Escolha uma opção"). -->
+                    <span id="erro-decisao"></span>
+                </fieldset>
+
+                <!-- Motivo. Obrigatório para DEVOLVER (o professor precisa
+                     saber o que corrigir; o texto aparece na tela dele) e
+                     para CANCELAR (fica registrado no histórico).
+                     Opcional para publicar. O JS confere conforme a opção. -->
+                <div>
+                    <label for="campo-motivo">Motivo</label>
+                    <textarea
+                        id="campo-motivo"
+                        name="motivo"
+                        rows="3"
+                        maxlength="500"
+                        aria-describedby="dica-motivo erro-motivo"
+                    ></textarea>
+                    <small id="dica-motivo">Obrigatório para devolver ou cancelar. Na devolução, este texto será mostrado ao professor.</small>
+                    <span id="erro-motivo"></span>
+                </div>
+
+                <!-- Confirma a decisão (evento "submit"). Publicar é uma
+                     ação importante (a família passa a ver o relatório),
+                     por isso o JS pode pedir uma confirmação extra. -->
+                <button type="submit">Confirmar decisão</button>
+            </form>
+        </section>
+
+        <!-- ----------------------------------------------------
+             SEÇÃO 4: HISTÓRICO (RF07 - auditoria)
+             Cada mudança de estado vem da tabela historico:
+             quem fez, quando, estado anterior e estado posterior.
+             ---------------------------------------------------- -->
+        <section aria-labelledby="titulo-historico">
+
+            <h2 id="titulo-historico">Histórico</h2>
+
+            <table>
+                <caption>Alterações e mudanças de status deste acompanhamento</caption>
+
+                <thead>
+                    <tr>
+                        <!-- scope="col": cabeçalho vale para a coluna inteira. -->
+                        <th scope="col">Data e hora</th>
+                        <th scope="col">Usuário</th>
+                        <th scope="col">Status anterior</th>
+                        <th scope="col">Novo status</th>
+                        <th scope="col">Motivo / justificativa</th>
+                    </tr>
+                </thead>
+
+                <!-- Preenchido pelo JavaScript, do mais recente para o
+                     mais antigo. O índice idx_historico_acomp_data do
+                     banco deixa essa consulta rápida. -->
+                <tbody id="tabela-historico">
+                    <tr>
+                        <!-- colspan="5": ocupa as 5 colunas. -->
+                        <td colspan="5">Carregando...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Saída para voltar à lista. -->
+        <p><a href="/admin/revisao.html">Voltar para a revisão</a></p>
+
+    </main>
+
+    <!-- Rodapé da página. -->
+    <footer>
+        <p>KFKA - Plataforma de Acompanhamento Escolar</p>
+    </footer>
+
+</body>
+</html>

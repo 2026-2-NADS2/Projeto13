@@ -1,0 +1,273 @@
+<!-- ============================================================
+     KFKA - Plataforma de Acompanhamento Escolar
+     Tela: Detalhe do relatório (página 3 de 4 do Responsável)
+     Descrição: mostra UM relatório de acompanhamento publicado,
+     completo: descrição do professor, média e tags. Aqui o
+     Responsável pode baixar o PDF (RF09) e registrar que tomou
+     ciência do relatório, com uma observação opcional (RF12).
+
+     Como se chega aqui: pelo link "Ver relatório" das páginas 1 ou 2.
+     A URL traz o id do relatório, por exemplo:
+       /responsavel/relatorio.html?id=42
+     O JavaScript lê esse "id" e busca o relatório na API.
+
+     Segurança e LGPD: qualquer pessoa pode trocar o número na URL
+     (ex.: ?id=43). Por isso o BACKEND precisa conferir se o
+     relatório pertence a um aluno vinculado ao responsável logado
+     e se está publicado. Se não estiver, a API recusa (403/404) e
+     esta tela mostra a mensagem de erro.
+
+     Os dados serão preenchidos pelo JavaScript (fetch) nos
+     elementos que têm "id".
+     ============================================================ -->
+
+<!DOCTYPE html>
+
+<!-- lang="pt-br": idioma do conteúdo. -->
+<html lang="pt-br">
+
+<head>
+    <!-- UTF-8 para acentos e "ç". -->
+    <meta charset="UTF-8">
+
+    <!-- Base da responsividade: largura real da tela, sem zoom inicial. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Texto da aba do navegador. O JavaScript pode completar com o
+         nome da disciplina e do bimestre depois de carregar os dados. -->
+    <title>Relatório de acompanhamento | KFKA</title>
+</head>
+
+<body>
+
+    <!-- ========================================================
+         CABEÇALHO DO SISTEMA (igual nas páginas do Responsável)
+         ======================================================== -->
+    <header>
+
+        <!-- Nome do sistema (o <h1> desta página fica no <main>). -->
+        <p>KFKA</p>
+
+        <!-- Menu de navegação principal. Nenhum item recebe
+             aria-current="page", porque esta página não está no menu:
+             ela é um "detalhe" dentro da seção Relatórios. -->
+        <nav aria-label="Menu principal">
+            <ul>
+                <li><a href="/responsavel/inicio.html">Início</a></li>
+                <li><a href="/responsavel/relatorios.html">Relatórios</a></li>
+                <li><a href="/responsavel/conta.html">Minha conta</a></li>
+            </ul>
+        </nav>
+
+        <!-- Área do usuário logado. -->
+        <div>
+            <!-- Preenchido pelo JavaScript com o nome do responsável. -->
+            <span id="nome-usuario">Responsável</span>
+
+            <!-- Logout (RF01). type="button": não envia formulário. -->
+            <button type="button" id="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <!-- ========================================================
+         CONTEÚDO PRINCIPAL
+         ======================================================== -->
+    <main>
+
+        <!-- Trilha de navegação (breadcrumb): Início > Relatórios > Detalhe.
+             <ol> porque a ordem dos níveis importa. -->
+        <nav aria-label="Você está em">
+            <ol>
+                <li><a href="/responsavel/inicio.html">Início</a></li>
+                <li><a href="/responsavel/relatorios.html">Relatórios</a></li>
+                <!-- Página atual: não é link. -->
+                <li aria-current="page">Detalhe do relatório</li>
+            </ol>
+        </nav>
+
+        <!-- Mensagem de carregamento/erro da página inteira.
+             role="status": o leitor de tela anuncia mudanças no texto
+             sem interromper o usuário. O JS escreve "Carregando..." e
+             depois apaga, ou escreve o erro (ex.: "Relatório não
+             encontrado ou você não tem acesso a ele"). -->
+        <p id="mensagem-carregamento" role="status">Carregando relatório...</p>
+
+        <!-- <article>: conteúdo completo e independente, que faria
+             sentido sozinho (poderia ser impresso ou virar um PDF).
+             Um relatório de acompanhamento é exatamente isso. -->
+        <article aria-labelledby="titulo-relatorio">
+
+            <!-- Título principal da página. O JavaScript completa com
+                 os dados reais, por exemplo:
+                 "Matemática - 3º bimestre de 2026". -->
+            <h1 id="titulo-relatorio">Relatório de acompanhamento</h1>
+
+            <!-- ------------------------------------------------
+                 DADOS DO RELATÓRIO
+                 <dl> (lista de descrição): pares nome -> valor.
+                 <dt> é o nome do campo e <dd> é o valor.
+                 Os campos seguem a view vw_relatorio_publicado.
+                 ------------------------------------------------ -->
+            <dl>
+                <div>
+                    <dt>Aluno</dt>
+                    <dd id="relatorio-aluno">-</dd>
+                </div>
+                <div>
+                    <dt>Turma</dt>
+                    <dd id="relatorio-turma">-</dd>
+                </div>
+                <div>
+                    <dt>Disciplina</dt>
+                    <dd id="relatorio-disciplina">-</dd>
+                </div>
+                <div>
+                    <dt>Professor(a)</dt>
+                    <dd id="relatorio-professor">-</dd>
+                </div>
+                <div>
+                    <dt>Bimestre</dt>
+                    <dd id="relatorio-bimestre">-</dd>
+                </div>
+                <div>
+                    <dt>Média do bimestre</dt>
+                    <dd id="relatorio-media">-</dd>
+                </div>
+                <div>
+                    <dt>Publicado em</dt>
+                    <!-- O JS pode usar a tag <time datetime="2026-09-22">
+                         aqui dentro: ela guarda a data num formato que
+                         a máquina entende, além do texto para leitura. -->
+                    <dd id="relatorio-publicado-em">-</dd>
+                </div>
+            </dl>
+
+            <!-- ------------------------------------------------
+                 DESCRIÇÃO DO PROFESSOR
+                 <section> dentro do <article>: partes do relatório.
+                 ------------------------------------------------ -->
+            <section aria-labelledby="titulo-descricao">
+                <h2 id="titulo-descricao">Descrição do acompanhamento</h2>
+
+                <!-- Texto escrito pelo professor e revisado pela escola.
+                     IMPORTANTE (XSS): o JavaScript deve inserir este
+                     texto com textContent, e nunca com innerHTML, porque
+                     ele foi digitado por uma pessoa e pode conter
+                     caracteres que o navegador interpretaria como código. -->
+                <p id="relatorio-descricao"></p>
+            </section>
+
+            <!-- ------------------------------------------------
+                 TAGS DE ACOMPANHAMENTO
+                 Um relatório pode ter várias tags (tabela acomp_tag),
+                 por exemplo: "Participativo", "Precisa de reforço".
+                 ------------------------------------------------ -->
+            <section aria-labelledby="titulo-tags">
+                <h2 id="titulo-tags">Pontos observados</h2>
+
+                <!-- Lista preenchida pelo JS: um <li> por tag. -->
+                <ul id="relatorio-tags"></ul>
+            </section>
+
+            <!-- ------------------------------------------------
+                 AÇÕES: PDF (RF09)
+                 ------------------------------------------------ -->
+            <section aria-labelledby="titulo-pdf">
+                <h2 id="titulo-pdf">Baixar relatório</h2>
+
+                <!-- type="button": não envia formulário. O JavaScript
+                     pede o PDF para a API e inicia o download. -->
+                <button type="button" id="botao-pdf">Baixar em PDF</button>
+            </section>
+
+            <!-- ------------------------------------------------
+                 CIÊNCIA DO RESPONSÁVEL (RF12)
+                 O responsável confirma que leu o relatório e pode
+                 deixar uma observação para o professor e a escola.
+                 ------------------------------------------------ -->
+            <section aria-labelledby="titulo-ciencia">
+                <h2 id="titulo-ciencia">Registrar ciência</h2>
+
+                <!-- Situação da ciência, preenchida pelo JS. Se já foi
+                     registrada, mostra algo como "Ciência registrada em
+                     22/09/2026" e o JS esconde o formulário abaixo. -->
+                <p id="status-ciencia"></p>
+
+                <!-- Formulário de ciência.
+                     novalidate: a validação e as mensagens de erro são
+                     feitas pelo nosso JavaScript (mesmo padrão do login). -->
+                <form id="form-ciencia" novalidate>
+
+                    <!-- Mensagem geral do formulário (sucesso ou erro do
+                         envio). role="alert": lida assim que aparece.
+                         hidden: começa escondida. -->
+                    <div id="mensagem-ciencia" role="alert" hidden></div>
+
+                    <!-- Confirmação obrigatória. -->
+                    <div>
+                        <!-- type="checkbox": caixa de marcar.
+                             required: o responsável precisa marcar para
+                             registrar a ciência.
+                             aria-describedby: liga ao <span> de erro. -->
+                        <input
+                            type="checkbox"
+                            id="ciencia-confirmacao"
+                            name="confirmacao"
+                            required
+                            aria-describedby="erro-confirmacao"
+                        >
+                        <!-- Rótulo ligado ao checkbox: clicar no texto
+                             também marca a caixa (área de toque maior
+                             no celular). -->
+                        <label for="ciencia-confirmacao">Declaro que li este relatório de acompanhamento.</label>
+
+                        <!-- Espaço para o erro (ex.: "Marque a confirmação"). -->
+                        <span id="erro-confirmacao"></span>
+                    </div>
+
+                    <!-- Observação opcional. -->
+                    <div>
+                        <label for="ciencia-observacao">Observação para a escola (opcional)</label>
+
+                        <!-- <textarea>: campo de texto com várias linhas.
+                             rows="4": altura inicial de 4 linhas.
+                             maxlength="500": limite de caracteres, que o
+                             backend também deve conferir.
+                             aria-describedby liga o campo a DOIS elementos
+                             (separados por espaço): a dica de limite e o erro. -->
+                        <textarea
+                            id="ciencia-observacao"
+                            name="observacao"
+                            rows="4"
+                            maxlength="500"
+                            aria-describedby="dica-observacao erro-observacao"
+                        ></textarea>
+
+                        <!-- Dica fixa sobre o limite e a finalidade. Dizer
+                             QUEM vai ler a observação é transparência de
+                             finalidade, um dos princípios da LGPD. -->
+                        <small id="dica-observacao">Até 500 caracteres. Será lida pelo(a) professor(a) e pela coordenação.</small>
+
+                        <!-- Espaço para o erro da observação. -->
+                        <span id="erro-observacao"></span>
+                    </div>
+
+                    <!-- Envia o formulário de ciência. -->
+                    <button type="submit">Registrar ciência</button>
+                </form>
+            </section>
+
+        </article>
+
+        <!-- Saída para voltar à lista sem usar o botão do navegador. -->
+        <p><a href="/responsavel/relatorios.html">Voltar para os relatórios</a></p>
+
+    </main>
+
+    <!-- Rodapé da página. -->
+    <footer>
+        <p>KFKA - Plataforma de Acompanhamento Escolar</p>
+    </footer>
+
+</body>
+</html>

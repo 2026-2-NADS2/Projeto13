@@ -1,0 +1,18 @@
+{
+  "name": "kfka-backend",
+  "version": "1.0.0",
+  "description": "KFKA - Plataforma de Acompanhamento Escolar (backend)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^18.0.3",
+    "express": "^5.2.1",
+    "mysql2": "^3.24.4"
+  }
+}

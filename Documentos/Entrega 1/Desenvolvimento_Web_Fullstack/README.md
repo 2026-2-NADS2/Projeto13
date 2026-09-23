@@ -135,6 +135,7 @@ Exemplo: http://localhost:3000/api/relatorios?aluno=1&bimestre=3
 
 ## Equipe
 
-- [Nome do integrante 1]
-- [Nome do integrante 2]
-- [Nome do integrante 3]
+- André Seiji Shiroma
+- Marcos Almeida Daloia
+- Enzo Mancio
+- Clayton Santos Ferreira

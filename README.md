@@ -7,7 +7,7 @@
 </p>
 
 # Plataforma Web para Acompanhamento Escolar
-* https://claude.ai/artifact/86UR56afRXzod6eqobEncF
+
 ## Nova Stark
 
 ## Integrantes: <a href="https://www.linkedin.com/in/andré-seiji-shiroma">André Seiji Shiroma</a>, <a href="https://www.linkedin.com/in/victorbarq/">Marcos Almeida Daloia</a>, <a href="https://www.linkedin.com/in/victorbarq/">Clayton Santos Ferreira</a>, <a href="https://www.linkedin.com/in/victorbarq/">Enzo Mancio</a>

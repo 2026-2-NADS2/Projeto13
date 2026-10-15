@@ -118,3 +118,5 @@ Foram usados **Gemini** e **Claude** na primeira versão do jogo e os resultados
 - Código gerado e revisado com **Claude** (Anthropic) e **Gemini** (Google).
 - Editado com **VS Code** + extensão **Live Server**.
 - Nenhuma imagem, som ou biblioteca de terceiros: os sprites são mapas de texto e os sons são sintetizados no código.
+
+  # link dos nossos slides: https://canva.link/v2xq5tk5ny1wyuj

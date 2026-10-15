@@ -4,10 +4,10 @@ Jogo no estilo Space Invaders, feito em **JavaScript puro + HTML5 `<canvas>`**, 
 
 ## Integrantes
 
-- André Seiji Shiroma RA: 26029347
-- Marcos Almeida Daloia RA:
-- Clayton Santos Ferreira RA:
-- Enzo Mancio RA:
+- André Seiji Shiroma 
+- Marcos Almeida Daloia
+- Clayton Santos Ferreira
+- Enzo Mancio
 
 ## Como executar
 

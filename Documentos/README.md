@@ -12,11 +12,11 @@ Esta declaração segue o modelo do **Guia para o Uso Responsável de Inteligên
 
 | Campo | Informação |
 | --- | --- |
-| **Ferramenta utilizada** | Claude (Anthropic), pelo site claude.ai, dentro de um Projeto que tinha como referência o documento oficial do PI |
-| **Versão/modelo** | Claude Opus 5.5 *[conferir se outros modelos foram usados nas conversas anteriores]* |
-| **Período de uso** | Setembro a novembro de 2026 (Entrega 1, Entrega 2 e banner) |
-| **Dados enviados à IA** | Somente o documento do PI, o código do grupo e os dados **fictícios** do `seed.sql`. Nenhum dado real de alunos, responsáveis, professores ou da FECAP foi enviado à ferramenta (Art. 5º do guia e LGPD). |
-| **Revisão humana** | Todo o conteúdo gerado foi lido, testado e ajustado pelo grupo. O grupo é o responsável integral pelo conteúdo final (Art. 3º). |
+| **Ferramenta utilizada** | Claude (Anthropic), Gemini (Google), ChatGPT (OpenAi) |
+| **Versão/modelo** | Claude Opus 5.5, Gemini 3.1 PRO, GPT6-Luna |
+| **Período de uso** | Setembro a novembro de 2026 (Entrega 1, Entrega 2) |
+| **Dados enviados à IA** | Somente o documento do PI, o código do grupo e os dados **fictícios** do `seed.sql`. Nenhum dado real de alunos, responsáveis, professores ou da FECAP foi enviado à ferramenta. |
+| **Revisão humana** | Todo o conteúdo gerado foi lido, testado e ajustado pelo grupo. |
 
 ---
 
@@ -27,18 +27,18 @@ Esta declaração segue o modelo do **Guia para o Uso Responsável de Inteligên
 | Campo | Informação |
 | --- | --- |
 | **Ferramenta / versão** | Claude – Claude Opus 5.5 |
-| **Finalidade de uso** | Geração e explicação de código: estrutura das 15 páginas HTML, servidor Express, conexão com o MySQL, rotas da API, login com JWT, migração do front-end para React e correção de erros de configuração (`.env`, `dotenv`). Elaboração do guia das páginas para CSS e JS. |
-| **Prompts principais** | "Seguinte, eu esqueci de colocar o React nesse arquivo zip, estou te mandando também o schema para você fazer os testes depois de colocar o React"; pedidos para montar as páginas HTML de cada perfil com comentários explicando cada elemento; pedidos de ajuda para conectar o Node.js ao MySQL. |
-| **Trechos ou entregas afetadas** | `server.js`, `db.js`, `.env.example`, páginas em `public/html/`, pasta `client/` (React), pasta `server/` (rotas e middlewares), `README.md` de instalação, documento "KFKA – Guia das páginas HTML para CSS e JS". |
+| **Finalidade de uso** | Geração e explicação de código: Correções e ajustes das páginas HTML, CSS e JS, conexão com o MySQL, rotas da API, login com JWT, migração do front-end para React e correção de erros de configuração (`.env`, `dotenv`). |
+| **Prompts principais** | "Me ajude a corrigir o bug dessa página", "Como ajustar a caixa/estilo dessa página css", "Porque esse código JS não esta funcionando?", "Por que o Banco MySQL não está se integrando com o site?", "Como faço para colocar e ajustar essa API?", "Pq essa página não esta se conectando com a outra página?"|
+| **Trechos ou entregas afetadas** | `server.js`, `db.js`, `.env.example`, páginas em `public/html/`, pasta `client/` (React), pasta `server/` (rotas e middlewares), `README.md` de instalação. |
 
 ### 2.2 Banco de Dados
 
 | Campo | Informação |
 | --- | --- |
 | **Ferramenta / versão** | Claude – Claude Opus 5.5 |
-| **Finalidade de uso** | Apoio à modelagem (as decisões sobre tabelas e relacionamentos foram discutidas e tomadas pelo grupo), geração e teste do `schema.sql`, geração do `seed.sql` com dados fictícios, revisão do documento de justificativa dos índices. |
-| **Prompts principais** | Pedidos para modelar as tabelas a partir das regras de negócio do PI; pedidos para gerar o `schema.sql` com índices e view; pedidos de revisão do documento da Entrega 1 (tom, contagem de tabelas, nomes dos índices). |
-| **Trechos ou entregas afetadas** | `schema.sql` (tabelas, índices e a view `vw_relatorio_publicado`), `seed.sql`, documento de justificativa dos índices (Entrega 1) *[incluir o documento da view da Entrega 2, se foi feito com IA]*. |
+| **Finalidade de uso** | Apoio à estrutura (as decisões sobre tabelas e relacionamentos foram discutidas e tomadas pelo grupo), teste e ajustes do `schema.sql`, teste e ajustes do `seed.sql` com dados fictícios, revisão do documento se estava faltando alguma coisa. |
+| **Prompts principais** | "Por que essa linha está vermelha no schema no meu MySQL?", "A estrutura desse schema esta correta?", "Teste para mim se esse schema esta funcionando com o site", "Me ajude a dar ideias de dados fictícios no seed", "Teste se o schema e o seed estão conversando direito no nosso site"|
+| **Trechos ou entregas afetadas** | `schema.sql` (tabelas, índices e a view ), `seed.sql` (Ideias de dados fictícios). |
 
 ### 2.3 Programação Orientada a Objetos
 
@@ -82,7 +82,7 @@ Esta declaração segue o modelo do **Guia para o Uso Responsável de Inteligên
 
 Declaramos que o uso acima descrito está em conformidade com o **GUIA PARA O USO RESPONSÁVEL DE INTELIGÊNCIA ARTIFICIAL NA FECAP** e que o conteúdo final é de nossa plena responsabilidade autoral.
 
-São Paulo, ___ de novembro de 2026.
+São Paulo, 06 de novembro de 2026.
 
 | Integrante | RA |
 | --- | --- |

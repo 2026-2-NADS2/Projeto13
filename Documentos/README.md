@@ -67,15 +67,6 @@ Esta declaração segue o modelo do **Guia para o Uso Responsável de Inteligên
 | **Prompts principais** | *[preencher]* |
 | **Trechos ou entregas afetadas** | *[preencher]* |
 
-### 2.6 Banner e apresentação
-
-| Campo | Informação |
-| --- | --- |
-| **Ferramenta / versão** | Claude – Claude Opus 5.5 |
-| **Finalidade de uso** | Redação dos textos "Resumo do projeto" e "Tecnologias utilizadas" do banner, a partir das informações do projeto e no estilo de um banner anterior do grupo. |
-| **Prompts principais** | "Consegue me montar um resumo nessa sessão que será usado de banner? Terá que conter um resumo do projeto, tecnologias utilizadas e tenha como base de escrita parecida com esse banner"; "Consegue gerar em inline em vez de lista". |
-| **Trechos ou entregas afetadas** | Seções "Resumo do projeto" e "Tecnologias utilizadas" do banner. |
-
 ---
 
 ## 3. Declaração

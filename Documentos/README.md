@@ -64,7 +64,7 @@
 | ***Prompts* principais utilizados** | [preencher] |
 | **Trechos ou entregas afetadas** | [preencher] |
 
-
+<br>
 ## Entrega 2
 <br>
 

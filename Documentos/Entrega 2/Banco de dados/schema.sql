@@ -1,12 +1,3 @@
--- ============================================================
--- KFKA - Plataforma de Acompanhamento Escolar
--- Schema do banco de dados (MySQL 8+)
--- Disciplina: Banco de Dados
---
--- Como rodar (na pasta prototipoKFKA):
---   mysql -u root -p < banco/schema.sql
---   mysql -u root -p kfka < banco/seed.sql
--- ============================================================
 
 CREATE DATABASE IF NOT EXISTS kfka
     CHARACTER SET utf8mb4
@@ -140,22 +131,12 @@ CREATE TABLE historico (
     usuario_id INT NOT NULL,
     estado_anterior ENUM('rascunho', 'enviado_revisao', 'em_revisao', 'publicado', 'devolvido', 'cancelado') NULL,
     estado_posterior ENUM('rascunho', 'enviado_revisao', 'em_revisao', 'publicado', 'devolvido', 'cancelado') NOT NULL,
-    -- (E2) Motivo da devolução/cancelamento ou justificativa de uma
-    -- alteração feita pelo Administrador. O documento do PI pede que
-    -- as alterações administrativas sejam rastreáveis (RF07); sem esta
-    -- coluna, o professor não teria como saber POR QUE o registro foi
-    -- devolvido.
     observacao VARCHAR(500) NULL,
     data_hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (acompanhamento_id) REFERENCES acompanhamento(id),
     FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
--- (E2) RF12: o responsável registra que leu o relatório e pode deixar
--- uma observação, que fica visível ao professor e à coordenação.
--- A chave única impede que o mesmo responsável registre ciência duas
--- vezes no mesmo relatório. Cada responsável do aluno (pai e mãe, por
--- exemplo) registra a sua.
 CREATE TABLE ciencia (
     id INT AUTO_INCREMENT PRIMARY KEY,
     acompanhamento_id INT NOT NULL,
@@ -169,32 +150,15 @@ CREATE TABLE ciencia (
 
 -- ============================================================
 -- 5. ÍNDICES
--- Observação: FKs e colunas UNIQUE já recebem índice automático
--- do InnoDB. Os índices abaixo cobrem filtros que NÃO são FK/UNIQUE
--- e que aparecem com frequência nas consultas do sistema.
 -- ============================================================
-
--- RF08: Pai/Responsável só enxerga acompanhamentos com status = 'publicado'.
--- Sem índice, cada consulta varreria a tabela inteira.
 CREATE INDEX idx_acompanhamento_status ON acompanhamento (status);
 
--- Índice composto: a consulta real do Pai combina "meu filho" (aluno_id)
--- + "só publicado" (status) na mesma busca. Um índice composto nessa
--- ordem atende as duas condições de uma vez, mais eficiente que dois
--- índices separados.
 CREATE INDEX idx_acompanhamento_aluno_status ON acompanhamento (aluno_id, status);
 
--- RF07: auditoria consulta sempre "todas as mudanças de UM acompanhamento,
--- em ordem cronológica". O índice cobre o filtro (acompanhamento_id) e a
--- ordenação (data_hora) numa estrutura só.
 CREATE INDEX idx_historico_acomp_data ON historico (acompanhamento_id, data_hora);
 
 -- ============================================================
 -- 6. VIEW
--- Empacota o JOIN de 6 tabelas usado sempre que o Pai/Responsável
--- consulta relatórios publicados (RF08/RF09), evitando repetir esse
--- JOIN em várias rotas do backend. Aproveita o índice
--- idx_acompanhamento_status criado acima.
 -- ============================================================
 
 CREATE VIEW vw_relatorio_publicado AS

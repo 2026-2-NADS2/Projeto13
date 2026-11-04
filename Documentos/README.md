@@ -7,7 +7,7 @@
 **Revisão humana:** todo o conteúdo gerado foi lido, testado e ajustado pelo grupo.
 
 ## Entrega 1
-<br><br>
+<br>
 
 ### Disciplina 1
 

@@ -63,7 +63,7 @@
 | **Finalidade de uso** | [preencher] |
 | ***Prompts* principais utilizados** | [preencher] |
 | **Trechos ou entregas afetadas** | [preencher] |
-<br><br>
+
 
 ## Entrega 2
 <br>

@@ -1,13 +1,3 @@
--- ============================================================
--- Dados FICTÍCIOS para teste e demonstração
--- Rodar DEPOIS do schema.sql:  mysql -u root -p kfka < seed.sql
---
--- Senha de TODOS os usuários de teste: senha123
--- (guardada como hash bcrypt, nunca em texto puro)
--- ============================================================
-
--- Garante que acentos e "ç" sejam gravados corretamente (UTF-8).
--- Sem esta linha, alguns clientes MySQL gravam "5º A" como "5Âº A".
 SET NAMES utf8mb4;
 
 USE kfka;
@@ -36,9 +26,7 @@ INSERT INTO disciplina (id, nome, area_id) VALUES
   (2, 'Língua Portuguesa', 2),
   (3, 'Ciências', 3);
 
--- Bimestres de 2026. O 4º está com a digitação ABERTA de 01/11 a 10/12,
--- para a Entrega 2 e a apresentação (17 a 24/11). O Administrador pode
--- mudar essas datas na tela "Períodos".
+
 INSERT INTO bimestre (id, numero, ano_letivo, data_abertura, data_encerramento) VALUES
   (1, 1, 2026, '2026-04-01 00:00:00', '2026-04-20 23:59:00'),
   (2, 2, 2026, '2026-06-20 00:00:00', '2026-07-05 23:59:00'),

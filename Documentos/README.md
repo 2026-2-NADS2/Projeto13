@@ -28,7 +28,7 @@
 | **Versão/modelo** | Claude Opus 5.5 |
 | **Disciplina / Trabalho** | Banco de Dados – Entrega 1 (índices) |
 | **Finalidade de uso** | Apoio à modelagem (as decisões sobre tabelas e relacionamentos foram discutidas e tomadas pelo grupo), teste do `schema.sql`, ideias de dados fictícios para o `seed.sql`, correções de erros ortográficos e partes técnicas no documento Word. |
-| ***Prompts* principais utilizados** | "Por que essa linha está vermelha no schema no meu MySQL?"; "A estrutura desse schema está correta?"; "Teste para mim se esse schema está funcionando"; "Me ajude a dar ideias de dados fictícios no seed"; pedido para montar o documento da Entrega 1 com a justificativa dos índices. |
+| ***Prompts* principais utilizados** | "Por que essa linha está vermelha no schema no meu MySQL?"; "A estrutura desse schema está correta?"; "Teste para mim se esse schema está funcionando"; "Me ajude a dar ideias de dados fictícios no seed". |
 | **Trechos ou entregas afetadas** | `schema.sql` (tabelas, índices e view), `seed.sql` (dados fictícios), documento "KFKA_BancoDeDados_Entrega1_Indices.docx". |
 
 ### Disciplina 3
@@ -74,10 +74,10 @@
 | :--- | :--- |
 | **Ferramenta utilizada** | Claude (Anthropic) |
 | **Versão/modelo** | Claude Opus 5.5 |
-| **Disciplina / Trabalho** | Desenvolvimento Web Full Stack – Entrega 2 (back-end e migração para React) |
-| **Finalidade de uso** | Geração e explicação de código: migração do front-end para React (Vite, React Router e Context API, seguindo o material das aulas 06 a 08), API em Express com login por JWT, rotas protegidas por perfil, validação e respostas de erro padronizadas, testes automatizados da API e das telas e `README.md` de instalação e publicação. |
-| ***Prompts* principais utilizados** | "Esqueci de colocar o React nesse zip; faça os testes depois de colocar o React, usando o schema"; "Com base no documento do PI, é preciso migrar tudo para o React?"; envio do material de React do professor (aulas 06 a 08) para seguir o mesmo padrão; "Por que o banco MySQL não está se integrando com o site?" |
-| **Trechos ou entregas afetadas** | Pasta `client/` (React), pasta `server/` (`server.js`, `db.js`, `rotas/`, `middlewares/`, `utilitarios/`), `.env.example`, `README.md` de instalação. |
+| **Disciplina / Trabalho** | Desenvolvimento Web Full Stack – Entrega 1 (front-end) |
+| **Finalidade de uso** | Geração e explicação de código: correções e ajustes das páginas HTML, CSS e JavaScript, conexão do Express com o MySQL, criação das rotas `GET /api/relatorios` e `POST /api/login` e correção de erros do (`.env`, `dotenv`). |
+| ***Prompts* principais utilizados** | "Me ajude a corrigir o bug dessa página"; "Como ajustar a caixa/estilo dessa página CSS?"; "Por que esse código JS não está funcionando?"; "Por que o banco MySQL não está se integrando com o site?"; "Como faço para colocar e ajustar essa API?"; "Por que essa página não está se conectando com a outra página?" |
+| **Trechos ou entregas afetadas** | `server.js`, `db.js`, `.env.example`, páginas em `public/html/`, `public/css/style.css`, `public/js/` (`comum.js`, `login.js`, `responsavel_relatorios.js`). |
 
 ### Disciplina 2
 
@@ -85,21 +85,45 @@
 | :--- | :--- |
 | **Ferramenta utilizada** | Claude (Anthropic) |
 | **Versão/modelo** | Claude Opus 5.5 |
-| **Disciplina / Trabalho** | Banco de Dados – Entrega 2 (view) |
-| **Finalidade de uso** | Ajustes do `schema.sql` para a Entrega 2 (tabela `ciencia` e coluna `historico.observacao`), atualização do `seed.sql` com dados fictícios, teste do schema e do seed junto com o site, execução das consultas sobre a view e geração do documento Word da view, revisado pelo grupo. |
-| ***Prompts* principais utilizados** | "Teste se o schema e o seed estão conversando direito no nosso site"; "Houve alguma alteração no arquivo do schema e do seed?"; "Vamos começar com a segunda entrega do banco de dados". |
-| **Trechos ou entregas afetadas** | `banco/schema.sql`, `banco/seed.sql`, documento "KFKA_BancoDeDados_Entrega2_View.docx". |
+| **Disciplina / Trabalho** | Banco de Dados – Entrega 1 (índices) |
+| **Finalidade de uso** | Apoio à modelagem (as decisões sobre tabelas e relacionamentos foram discutidas e tomadas pelo grupo), teste do `schema.sql`, ideias de dados fictícios para o `seed.sql`, correções de erros ortográficos e partes técnicas no documento Word. |
+| ***Prompts* principais utilizados** | "Por que essa linha está vermelha no schema no meu MySQL?"; "A estrutura desse schema está correta?"; "Teste para mim se esse schema está funcionando"; "Me ajude a dar ideias de dados fictícios no seed". |
+| **Trechos ou entregas afetadas** | `schema.sql` (tabelas, índices e view), `seed.sql` (dados fictícios), documento "KFKA_BancoDeDados_Entrega1_Indices.docx". |
 
 ### Disciplina 3
 
 | **Aluno(s) Responsável(veis)** | [preencher] |
 | :--- | :--- |
-| **Ferramenta utilizada** | [preencher] |
+| **Ferramenta utilizada** | [preencher]  |
 | **Versão/modelo** | [preencher] |
-| **Disciplina / Trabalho** | [preencher] |
+| **Disciplina / Trabalho** | Programação Orientada a Objetos |
 | **Finalidade de uso** | [preencher] |
 | ***Prompts* principais utilizados** | [preencher] |
 | **Trechos ou entregas afetadas** | [preencher] |
+
+### Disciplina 4
+
+| **Aluno(s) Responsável(veis)** | [preencher] |
+| :--- | :--- |
+| **Ferramenta utilizada** | [preencher] |
+| **Versão/modelo** | [preencher] |
+| **Disciplina / Trabalho** | Design de Interface Digital |
+| **Finalidade de uso** | [preencher] |
+| ***Prompts* principais utilizados** | [preencher] |
+| **Trechos ou entregas afetadas** | [preencher] |
+
+### Disciplina 5
+
+| **Aluno(s) Responsável(veis)** | [preencher] |
+| :--- | :--- |
+| **Ferramenta utilizada** | [preencher] |
+| **Versão/modelo** | [preencher] |
+| **Disciplina / Trabalho** | Estrutura de Dados |
+| **Finalidade de uso** | [preencher] |
+| ***Prompts* principais utilizados** | [preencher] |
+| **Trechos ou entregas afetadas** | [preencher] |
+<br><br>
+
 
 ***Declaro que o uso acima descrito está em conformidade com o GUIA PARA O USO RESPONSÁVEL DE
 INTELIGÊNCIA ARTIFICIAL NA FECAP e que o conteúdo final é de minha plena responsabilidade

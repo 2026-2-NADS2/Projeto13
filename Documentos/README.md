@@ -35,9 +35,9 @@
 
 | **Aluno(s) Responsável(veis)** | [preencher] |
 | :--- | :--- |
-| **Ferramenta utilizada** | Programação Orientada a Objetos |
+| **Ferramenta utilizada** | [preencher]  |
 | **Versão/modelo** | [preencher] |
-| **Disciplina / Trabalho** | [preencher] |
+| **Disciplina / Trabalho** | Programação Orientada a Objetos |
 | **Finalidade de uso** | [preencher] |
 | ***Prompts* principais utilizados** | [preencher] |
 | **Trechos ou entregas afetadas** | [preencher] |
@@ -46,9 +46,9 @@
 
 | **Aluno(s) Responsável(veis)** | [preencher] |
 | :--- | :--- |
-| **Ferramenta utilizada** | Design de Interface Digital |
+| **Ferramenta utilizada** | [preencher] |
 | **Versão/modelo** | [preencher] |
-| **Disciplina / Trabalho** | [preencher] |
+| **Disciplina / Trabalho** | Design de Interface Digital |
 | **Finalidade de uso** | [preencher] |
 | ***Prompts* principais utilizados** | [preencher] |
 | **Trechos ou entregas afetadas** | [preencher] |
@@ -57,9 +57,9 @@
 
 | **Aluno(s) Responsável(veis)** | [preencher] |
 | :--- | :--- |
-| **Ferramenta utilizada** | Estrutura de Dados |
+| **Ferramenta utilizada** | [preencher] |
 | **Versão/modelo** | [preencher] |
-| **Disciplina / Trabalho** | [preencher] |
+| **Disciplina / Trabalho** | Estrutura de Dados |
 | **Finalidade de uso** | [preencher] |
 | ***Prompts* principais utilizados** | [preencher] |
 | **Trechos ou entregas afetadas** | [preencher] |

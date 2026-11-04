@@ -27,7 +27,7 @@
 | **Ferramenta utilizada** | Claude (Anthropic) |
 | **Versão/modelo** | Claude Opus 5.5 |
 | **Disciplina / Trabalho** | Banco de Dados – Entrega 1 (índices) |
-| **Finalidade de uso** | Apoio à modelagem (as decisões sobre tabelas e relacionamentos foram discutidas e tomadas pelo grupo), escrita e teste do `schema.sql` (tabelas, os 3 índices e a view), ideias de dados fictícios para o `seed.sql` e geração do documento Word com a justificativa dos índices, revisado pelo grupo. |
+| **Finalidade de uso** | Apoio à modelagem (as decisões sobre tabelas e relacionamentos foram discutidas e tomadas pelo grupo), teste do `schema.sql`, ideias de dados fictícios para o `seed.sql`, correções de erros ortográficos e partes técnicas no documento Word. |
 | ***Prompts* principais utilizados** | "Por que essa linha está vermelha no schema no meu MySQL?"; "A estrutura desse schema está correta?"; "Teste para mim se esse schema está funcionando"; "Me ajude a dar ideias de dados fictícios no seed"; pedido para montar o documento da Entrega 1 com a justificativa dos índices. |
 | **Trechos ou entregas afetadas** | `schema.sql` (tabelas, índices e view), `seed.sql` (dados fictícios), documento "KFKA_BancoDeDados_Entrega1_Indices.docx". |
 
@@ -35,15 +35,38 @@
 
 | **Aluno(s) Responsável(veis)** | [preencher] |
 | :--- | :--- |
-| **Ferramenta utilizada** | [preencher] |
+| **Ferramenta utilizada** | Programação Orientada a Objetos |
 | **Versão/modelo** | [preencher] |
 | **Disciplina / Trabalho** | [preencher] |
 | **Finalidade de uso** | [preencher] |
 | ***Prompts* principais utilizados** | [preencher] |
 | **Trechos ou entregas afetadas** | [preencher] |
 
-## Entrega 2
+### Disciplina 4
+
+| **Aluno(s) Responsável(veis)** | [preencher] |
+| :--- | :--- |
+| **Ferramenta utilizada** | Design de Interface Digital |
+| **Versão/modelo** | [preencher] |
+| **Disciplina / Trabalho** | [preencher] |
+| **Finalidade de uso** | [preencher] |
+| ***Prompts* principais utilizados** | [preencher] |
+| **Trechos ou entregas afetadas** | [preencher] |
+
+### Disciplina 5
+
+| **Aluno(s) Responsável(veis)** | [preencher] |
+| :--- | :--- |
+| **Ferramenta utilizada** | Estrutura de Dados |
+| **Versão/modelo** | [preencher] |
+| **Disciplina / Trabalho** | [preencher] |
+| **Finalidade de uso** | [preencher] |
+| ***Prompts* principais utilizados** | [preencher] |
+| **Trechos ou entregas afetadas** | [preencher] |
 <br><br>
+
+## Entrega 2
+<br>
 
 ### Disciplina 1
 

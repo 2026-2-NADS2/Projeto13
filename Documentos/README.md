@@ -16,7 +16,7 @@
 | **Ferramenta utilizada** | Claude (Anthropic) |
 | **Versão/modelo** | Claude Opus 5.5 |
 | **Disciplina / Trabalho** | Desenvolvimento Web Full Stack – Entrega 1 (front-end) |
-| **Finalidade de uso** | Geração e explicação de código: correções e ajustes das páginas HTML, CSS e JavaScript (login com validação, lista de relatórios com filtros e paginação), conexão do Express com o MySQL, criação das rotas `GET /api/relatorios` e `POST /api/login` e correção de erros de configuração (`.env`, `dotenv`). |
+| **Finalidade de uso** | Geração e explicação de código: correções e ajustes das páginas HTML, CSS e JavaScript, conexão do Express com o MySQL, criação das rotas `GET /api/relatorios` e `POST /api/login` e correção de erros do (`.env`, `dotenv`). |
 | ***Prompts* principais utilizados** | "Me ajude a corrigir o bug dessa página"; "Como ajustar a caixa/estilo dessa página CSS?"; "Por que esse código JS não está funcionando?"; "Por que o banco MySQL não está se integrando com o site?"; "Como faço para colocar e ajustar essa API?"; "Por que essa página não está se conectando com a outra página?" |
 | **Trechos ou entregas afetadas** | `server.js`, `db.js`, `.env.example`, páginas em `public/html/`, `public/css/style.css`, `public/js/` (`comum.js`, `login.js`, `responsavel_relatorios.js`). |
 

@@ -1,0 +1,13 @@
+# Entrega 2 – Design de Interface Digital
+Equipe Nova Stark – Projeto KFKA
+
+Link do Figma: https://www.figma.com/design/xJYATKb1vbn6dynTeImqlX/Nova-Stark?node-id=56-16&t=Gy9ZFZJUHI00ARXM-1
+
+## O que tem no arquivo do Figma
+- **Mapa de navegação**: página "Mapa de navegação"
+- **Protótipo navegável**: página "Protótipo" (começa na Tela inicial, no Flow 1)
+- **Design System**: página "design System"
+
+## Como testar o protótipo
+Abrir o link → página Protótipo → botão ▶ (Apresentar).
+Tela inicial → Acessar plataforma → Login → Professor / Gestão / Responsável do aluno.

@@ -33,25 +33,25 @@
 
 ### Disciplina 3
 
-| **Aluno(s) Responsável(veis)** | [preencher] |
+| **Aluno(s) Responsável(veis)** | Marcos Almeida Daloia |
 | :--- | :--- |
-| **Ferramenta utilizada** | [preencher]  |
-| **Versão/modelo** | [preencher] |
-| **Disciplina / Trabalho** | Programação Orientada a Objetos |
-| **Finalidade de uso** | [preencher] |
-| ***Prompts* principais utilizados** | [preencher] |
-| **Trechos ou entregas afetadas** | [preencher] |
+| **Ferramenta utilizada** | Claude (Anthropic) |
+| **Versão/modelo** | Claude Opus 5.5 |
+| **Disciplina / Trabalho** | Programação Orientada a Objetos – Entrega 1 (estrutura básica do backend) |
+| **Finalidade de uso** | O aluno organizou a entrega e usou a IA como apoio para gerar e explicar a estrutura do backend em Node.js com MySQL: classes de domínio (Usuario, Administrador, Professor, Responsavel, Aluno, Bimestre, Acompanhamento), classe principal `SistemaKFKA`, repositórios de acesso ao banco, rotas da API e README. Também para explicar os conceitos de POO aplicados (herança, polimorfismo, encapsulamento, classe abstrata) e corrigir erros ao rodar no servidor local. O banco usado foi o `schema.sql` do grupo. |
+| ***Prompts* principais utilizados** | "Me ajude a fazer a primeira entrega de Programação Orientada a Objetos do PI"; "Como faço para conectar o backend no MySQL?"; "Por que está dando erro ao rodar o servidor?" |
+| **Trechos ou entregas afetadas** | Pasta `Documentos/Entrega 1/Programação Orientada a Objetos`: `src/core/SistemaKFKA.js`, `src/models/`, `src/repositories/`, `src/routes/index.js`, `src/server.js`, `src/config/database.js`, `.env.example`, `README.md`. |
 
 ### Disciplina 4
 
-| **Aluno(s) Responsável(veis)** | [preencher] |
+| **Aluno(s) Responsável(veis)** | Clayton Santos Ferreira, André Seiji Shiroma e Marcos Almeida Daloia |
 | :--- | :--- |
-| **Ferramenta utilizada** | [preencher] |
-| **Versão/modelo** | [preencher] |
-| **Disciplina / Trabalho** | Design de Interface Digital |
-| **Finalidade de uso** | [preencher] |
-| ***Prompts* principais utilizados** | [preencher] |
-| **Trechos ou entregas afetadas** | [preencher] |
+| **Ferramenta utilizada** | Não houve uso de IA nesta entrega |
+| **Versão/modelo** | — |
+| **Disciplina / Trabalho** | Design de Interface Digital – Entrega 1 (layout da Home, paleta de cores e Guia de Estilo) |
+| **Finalidade de uso** | — |
+| ***Prompts* principais utilizados** | — |
+| **Trechos ou entregas afetadas** | — |
 
 ### Disciplina 5
 
@@ -92,25 +92,25 @@
 
 ### Disciplina 3
 
-| **Aluno(s) Responsável(veis)** | [preencher] |
+| **Aluno(s) Responsável(veis)** | Marcos Almeida Daloia |
 | :--- | :--- |
-| **Ferramenta utilizada** | [preencher]  |
-| **Versão/modelo** | [preencher] |
-| **Disciplina / Trabalho** | Programação Orientada a Objetos |
-| **Finalidade de uso** | [preencher] |
-| ***Prompts* principais utilizados** | [preencher] |
-| **Trechos ou entregas afetadas** | [preencher] |
+| **Ferramenta utilizada** | Claude (Anthropic) |
+| **Versão/modelo** | Claude Opus 5.5 |
+| **Disciplina / Trabalho** | Programação Orientada a Objetos – Entrega 2 (backend na nuvem) |
+| **Finalidade de uso** | O aluno conduziu a entrega: definiu o que precisava ser feito (manter o mesmo modelo de banco do grupo e deixar o sistema funcional na nuvem), acompanhou cada etapa, organizou os arquivos e fez a entrega no repositório. A IA foi usada como apoio para gerar e explicar o código das novas funcionalidades a partir do backend da Entrega 1: login com senha criptografada (bcrypt) e token JWT, registro de ciência do responsável, motivo obrigatório na devolução, listas de revisão e de acompanhamentos do professor, conexão segura (SSL) com o banco na nuvem e criação automática do banco. O funcionamento foi testado com o fluxo completo (rascunho → revisão → publicação → ciência). O modelo do banco (`schema.sql` e `seed.sql`) é o do grupo e não foi alterado. |
+| ***Prompts* principais utilizados** | "Queria fazer a segunda entrega de Programação Orientada a Objetos"; "Queria usar o mesmo banco de dados, deixar daquele modelo"; "Como faço para colocar no GitHub?" |
+| **Trechos ou entregas afetadas** | Pasta `Documentos/Entrega 2/Programação Orientada a Objetos`: `src/core/SistemaKFKA.js`, `src/core/Autenticador.js`, `src/models/Ciencia.js`, `src/models/Usuario.js`, `src/repositories/`, `src/routes/index.js`, `src/server.js`, `src/config/database.js`, `scripts/criarBanco.js`, `README.md`. |
 
 ### Disciplina 4
 
-| **Aluno(s) Responsável(veis)** | [preencher] |
+| **Aluno(s) Responsável(veis)** | Clayton Santos Ferreira, André Seiji Shiroma e Marcos Almeida Daloia |
 | :--- | :--- |
-| **Ferramenta utilizada** | [preencher] |
-| **Versão/modelo** | [preencher] |
-| **Disciplina / Trabalho** | Design de Interface Digital |
-| **Finalidade de uso** | [preencher] |
-| ***Prompts* principais utilizados** | [preencher] |
-| **Trechos ou entregas afetadas** | [preencher] |
+| **Ferramenta utilizada** | Claude (Anthropic); gerador de imagens do Figma (IA) para as ilustrações |
+| **Versão/modelo** | Claude Opus 5.5 |
+| **Disciplina / Trabalho** | Design de Interface Digital – Entrega 2 (mapa de navegação, protótipo navegável e Design System) e atividades de Personas e Brand Persona |
+| **Finalidade de uso** | Orientação passo a passo de como usar o Figma (criar quadros, textos, setas e ligações do protótipo); sugestão da estrutura do mapa de navegação, da Tela inicial e das partes do Design System (cores dos status, escala de tipografia, espaçamentos, cantos e ícones); escrita do texto da Brand Persona (Kika); geração das ilustrações da Kika e das personas. A montagem no Figma foi feita pelo grupo, e as telas já existentes foram mantidas, mudando só as cores para o padrão do guia de estilo. As imagens geradas por IA estão identificadas no arquivo. |
+| ***Prompts* principais utilizados** | "Me fala passo a passo, vamos fazendo devagar"; "Pode fazer o texto, aí você só me ensina como coloca no Figma passo a passo"; "Vamos começar a Entrega 2"; "Como faço o quadrado?" |
+| **Trechos ou entregas afetadas** | Arquivo Figma "Nova Stark": páginas Mapa de navegação, Protótipo (Tela inicial e ligações entre as telas), design System, Brand Persona e Persona (ilustrações); pasta `Documentos/Entrega 2/Design de Interface Digital` (`README.md` e PDF exportado). |
 
 ### Disciplina 5
 

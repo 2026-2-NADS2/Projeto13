@@ -3,7 +3,7 @@
 -- Schema do banco de dados (MySQL 8+)
 -- Disciplina: Banco de Dados
 --
--- Como rodar (na pasta prototipoKFKA):
+-- Como rodar (na pasta src):
 --   mysql -u root -p < banco/schema.sql
 --   mysql -u root -p kfka < banco/seed.sql
 -- ============================================================

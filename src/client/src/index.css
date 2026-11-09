@@ -1,0 +1,1049 @@
+/* 
+   KFKA - Estilos globais (client/src/index.css)
+   Plataforma de Acompanhamento Escolar
+   Entrega 1: public/css/style.css (HTML + JS puro)
+   Entrega 2: o MESMO arquivo, importado pelo React em main.jsx.
+   Como o JSX manteve as mesmas tags, ids e atributos (aria-current,
+   aria-invalid, hidden...), quase nada precisou mudar. A única troca
+   foi "body > ..." por "#root > ..." (explicado na seção 3).
+
+   Baseado no "Guia de estilo v1.0". Regras deste arquivo:
+
+   1. Use SEMPRE as variáveis (var(--...)) em vez de códigos de cor.
+      Se uma cor mudar, ela muda em um lugar só (seção 1).
+   2. Estilize pelo que o HTML já tem (tags, id, atributos como
+      aria-current e aria-invalid), sem inventar classes novas.
+   3. MOBILE FIRST: o CSS base vale para o celular; o que muda em
+      telas maiores fica no @media (min-width: 768px) no FIM do arquivo.
+   4. O CSS cuida só da APARÊNCIA. O JavaScript escreve textos,
+      mostra/esconde elementos (atributo hidden) e marca campos com
+      erro (aria-invalid="true"). O CSS apenas reage a isso.
+
+   Índice:
+    1. Variáveis (design tokens)
+    2. Base (reset, tipografia, links, foco)
+    3. Estrutura da página (body, header, main, footer)
+    4. Menu principal e botão Sair
+    5. Trilha de navegação (breadcrumb)
+    6. Cartões (section e article)
+    7. Formulários (campos, erros, mensagens, grupos)
+    8. Botões
+    9. Tabelas
+   10. Etiquetas de status
+   11. Pares rótulo/valor (dl), tags e listas
+   12. Blocos especiais (período, devolução, resumo do admin)
+   13. Paginação
+   14. Página de login
+   15. Página 404
+   16. Telas maiores (@media min-width: 768px)
+   17. Movimento reduzido (acessibilidade)
+   ============================================================ */
+
+
+/* ============================================================
+   1. VARIÁVEIS (design tokens)
+   ============================================================ */
+:root {
+  /* Cores principais */
+  --cor-primaria: #1E4D8C;          /* cabeçalho, botões, links */
+  --cor-primaria-escura: #163A69;   /* hover de botões e links */
+  --cor-destaque: #F2B705;          /* item ativo do menu (nunca como fundo de texto branco) */
+
+  /* Cores neutras */
+  --cor-fundo: #F6F4EE;             /* fundo das páginas */
+  --cor-superficie: #FFFFFF;        /* cartões, tabelas, campos */
+  --cor-texto: #1C2230;             /* texto principal e títulos */
+  --cor-texto-suave: #525C6E;       /* legendas, dicas, cabeçalho de tabela */
+  --cor-borda: #D8D4C8;             /* contorno de cartões e linhas de tabela */
+  --cor-borda-campo: #857F70;       /* contorno de inputs, selects e botão neutro (contraste 4:1) */
+
+  /* Estados */
+  --cor-erro: #B3261E;              /* mensagens e bordas de erro */
+  --cor-erro-fundo: #FBE4E2;        /* caixa de mensagem geral de erro */
+  --cor-info-fundo: #E3ECF8;        /* avisos, como o período de digitação */
+
+  /* Cores extras que o guia cita em valores soltos (agrupadas aqui
+     para não espalhar código de cor pelo arquivo) */
+  --cor-menu-inativo: #DCE6F4;      /* link do menu que não é a página atual */
+  --cor-info-borda: #C4D5EE;        /* borda do aviso informativo */
+  --cor-creme: #FAF9F5;             /* linhas pares da tabela e fundo das tags */
+  --cor-aviso-fundo: #FCEBD9;       /* bloco "Ajustes solicitados" */
+  --cor-aviso-borda: #F0C9A0;
+  --cor-aviso-texto: #94480A;
+  --cor-sucesso-fundo: #E2F3EA;     /* mensagem de sucesso (mesma cor do status "publicado") */
+  --cor-sucesso-texto: #1B6B43;
+
+  /* Fontes (carregadas do Google Fonts no <head> de cada página) */
+  --fonte-titulo: "Bricolage Grotesque", "Source Sans 3", sans-serif;
+  --fonte-texto: "Source Sans 3", system-ui, sans-serif;
+
+  /* Formas */
+  --raio: 8px;                      /* botões e campos */
+  --raio-cartao: 12px;              /* cartões */
+  --sombra: 0 4px 16px rgba(29, 36, 51, 0.08);  /* só no cartão do login */
+}
+
+
+/* ============================================================
+   2. BASE
+   ============================================================ */
+
+/* box-sizing: border-box faz width/height já incluírem padding e borda.
+   Evita estouros de largura e, com isso, rolagem horizontal. */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* IMPORTANTE: se alguma regra abaixo definir "display" em um elemento
+   que tem o atributo hidden, ele voltaria a aparecer. Esta linha
+   garante que hidden SEMPRE esconde. */
+[hidden] { display: none !important; }
+
+/* Impede que o celular aumente o texto sozinho ao girar a tela. */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--fonte-texto);
+  font-size: 16px;
+  line-height: 1.5;                 /* entrelinha do texto */
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+  overflow-wrap: break-word;        /* palavras muito longas quebram em vez de estourar a tela */
+}
+
+h1, h2, h3 { font-family: var(--fonte-titulo); line-height: 1.15; margin: 0; }
+h1 { font-size: 28px; font-weight: 700; }                     /* 34px no computador (seção 16) */
+h2 { font-size: 21px; font-weight: 600; margin-bottom: 16px; }
+h3 { font-size: 18px; font-weight: 600; }
+
+p { margin: 0; }
+
+a { color: var(--cor-primaria); }
+a:hover { color: var(--cor-primaria-escura); }
+
+/* Foco visível: quem navega só pelo teclado (Tab) precisa ver onde está.
+   NUNCA remova o outline sem colocar outro indicador no lugar. */
+:focus-visible { outline: 2px solid var(--cor-primaria); outline-offset: 2px; }
+
+/* Campos e botões herdam a fonte da página (por padrão o navegador usa outra). */
+input, select, textarea, button { font: inherit; }
+
+
+/* ============================================================
+   3. ESTRUTURA DA PÁGINA
+   #root > header (faixa azul) + main (conteúdo) + footer
+   ============================================================ */
+
+/* body em coluna: o footer fica sempre no fim da tela, mesmo em
+   páginas com pouco conteúdo. */
+body {
+  min-height: 100vh;
+  min-height: 100dvh;               /* considera a barra de endereço do celular */
+  display: flex;
+  flex-direction: column;
+}
+
+/* REACT: tudo o que o React desenha fica dentro de <div id="root">
+   (index.html). Por isso o header, o main e o footer agora são filhos
+   do #root, e não do body. O #root ocupa a altura toda e repete a
+   coluna do body, para o rodapé continuar no fim da tela. Os seletores
+   que antes eram "body > header" viraram "#root > header". */
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Cabeçalho (faixa azul com logo, menu e usuário) ----------
+   O seletor "#root > header" pega só o cabeçalho do sistema. O
+   <header> do login fica dentro do <main>, então não é afetado. */
+#root > header {
+  background: var(--cor-primaria);
+  color: #FFFFFF;
+  display: flex;
+  flex-wrap: wrap;                  /* no celular, o menu desce para a 2ª linha */
+  align-items: center;
+  gap: 4px 16px;
+  padding: 8px 16px;
+  min-height: 60px;                 /* 68px no computador */
+}
+
+/* Logo "KFKA" (é um <p>, porque o <h1> de cada página fica no <main>) */
+#root > header > p {
+  order: 1;                         /* no celular: logo, usuário e depois o menu */
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: #FFFFFF;
+}
+
+/* Área do usuário: nome + botão Sair */
+#root > header > div {
+  order: 2;
+  margin-left: auto;                /* empurra para a direita */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#nome-usuario {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* Foco visível no cabeçalho: como o fundo é azul, o contorno azul
+   padrão sumiria. Aqui ele fica branco. */
+#root > header :focus-visible { outline-color: #FFFFFF; }
+
+/* ---------- Conteúdo principal ---------- */
+main {
+  flex: 1;                          /* ocupa o espaço que sobra e empurra o footer para baixo */
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;                   /* centraliza */
+  padding: 20px 16px 32px;          /* margem lateral de 16px no celular */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;                        /* espaço entre as seções (20px no celular) */
+}
+
+/* ---------- Rodapé ---------- */
+footer {
+  border-top: 1px solid var(--cor-borda);
+  padding: 16px;
+  color: var(--cor-texto-suave);
+  font-size: 14px;
+}
+footer p { max-width: 1200px; margin: 0 auto; }
+
+
+/* ============================================================
+   4. MENU PRINCIPAL E BOTÃO SAIR
+   ============================================================ */
+
+#root > header > nav {
+  order: 3;
+  flex-basis: 100%;                 /* no celular, o menu ocupa a linha inteira */
+}
+
+/* Lista do menu: sem marcadores; os links quebram de linha se faltar espaço */
+#root > header nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Link do menu (altura 10 + 24 + 10 = 44px: boa área de toque) */
+#root > header nav a {
+  display: block;
+  padding: 10px 14px;
+  border-radius: var(--raio);
+  color: var(--cor-menu-inativo);
+  text-decoration: none;
+}
+#root > header nav a:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Página atual: o HTML marca com aria-current="page" e o CSS destaca.
+   A barra amarela embaixo mostra a posição sem depender só da cor. */
+#root > header nav a[aria-current="page"] {
+  color: #FFFFFF;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 -3px 0 var(--cor-destaque);
+}
+
+/* Botão Sair: transparente com borda branca */
+#botao-sair {
+  background: transparent;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+#botao-sair:hover:not(:disabled) { background: rgba(255, 255, 255, 0.14); }
+
+
+/* ============================================================
+   5. TRILHA DE NAVEGAÇÃO (breadcrumb)
+   Ex.: Início › Relatórios › Detalhe do relatório
+   ============================================================ */
+
+nav[aria-label="Você está em"] ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+}
+
+/* O separador "›" é desenhado pelo CSS antes de cada item, menos do primeiro. */
+nav[aria-label="Você está em"] li + li::before {
+  content: "›";
+  margin-right: 8px;
+  color: var(--cor-texto-suave);
+}
+
+/* Área de toque de 44px sem aumentar a altura visual da trilha
+   (padding positivo + margem negativa se compensam). */
+nav[aria-label="Você está em"] a {
+  display: inline-block;
+  padding: 10px 0;
+  margin: -10px 0;
+}
+
+/* Último item (página atual): texto suave, sem ser link */
+nav[aria-label="Você está em"] [aria-current="page"] { color: var(--cor-texto-suave); }
+
+
+/* ============================================================
+   6. CARTÕES
+   Cada <section> dentro do <main> vira um cartão branco.
+   ============================================================ */
+
+main section,
+main article {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-cartao);
+  padding: 16px;                    /* 24px no computador */
+}
+
+/* Ritmo vertical dentro do cartão: 16px entre um bloco e o próximo.
+   (Usa o seletor "* + *": vale para todo elemento que tem um irmão antes.) */
+main section > * + * { margin-top: 16px; }
+main section > h2 + * { margin-top: 0; }   /* o h2 já tem margin-bottom de 16px */
+
+/* O article (detalhe do relatório) é o cartão; as sections dentro
+   dele ficam SEM borda e sem fundo, para não ter "cartão dentro de cartão". */
+main article {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+main article section {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+
+/* Links soltos no fim do cartão (ex.: "Ver todos os relatórios"):
+   área de toque de 44px sem mudar o espaçamento. */
+main p > a:only-child {
+  display: inline-block;
+  padding: 10px 0;
+  margin: -10px 0;
+}
+
+/* Mensagem de carregamento/erro da página inteira
+   (detalhe do relatório e revisão do admin) */
+p[role="status"] { color: var(--cor-texto-suave); }
+p[role="status"].erro { color: var(--cor-erro); font-weight: 600; }
+
+/* Textos digitados por pessoas mantêm as quebras de linha que a
+   pessoa escreveu. (O JS coloca o texto com textContent, o que é seguro.) */
+#relatorio-descricao,
+#motivo-devolucao,
+#retorno-observacao { white-space: pre-line; }
+
+
+/* ============================================================
+   7. FORMULÁRIOS
+   ============================================================ */
+
+/* Formulário em coluna, com 16px entre um campo e outro */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Em telas grandes, formulários de escrita não precisam esticar
+   pela largura toda (linhas muito longas cansam a leitura).
+   Os de filtro (role="search") ficam de fora. */
+main form:not([role="search"]) { max-width: 720px; }
+
+/* Rótulo: bloco, peso 700, 15px, 6px acima do campo */
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Campos de texto, número, e-mail, senha, busca, select e textarea.
+   :where() faz a exclusão de checkbox/radio SEM aumentar a
+   "força" (especificidade) da regra, para que o estado de erro
+   ([aria-invalid]) mais abaixo consiga sobrescrever a borda. */
+input:where(:not([type="checkbox"]):not([type="radio"])),
+select,
+textarea {
+  display: block;
+  width: 100%;
+  min-height: 44px;                 /* área de toque */
+  padding: 8px 12px;
+  font-size: 16px;                  /* menos que 16px faz o celular dar zoom ao tocar */
+  color: var(--cor-texto);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda-campo);
+  border-radius: var(--raio);
+}
+
+textarea { resize: vertical; }
+
+::placeholder { color: var(--cor-texto-suave); opacity: 1; }
+
+/* Campo com foco: contorno azul (o guia proíbe remover) */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--cor-primaria);
+  outline-offset: 1px;
+}
+
+/* Campo com erro: o JS coloca aria-invalid="true" e a borda fica vermelha.
+   A borda passa de 1px para 2px; o padding diminui 1px para o campo
+   não "pular" de tamanho. */
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-width: 2px;
+  border-color: var(--cor-erro);
+  padding: 7px 11px;
+}
+input[type="checkbox"][aria-invalid="true"],
+input[type="radio"][aria-invalid="true"] {
+  outline: 2px solid var(--cor-erro);
+  outline-offset: 2px;
+}
+
+/* Mensagem de erro de um campo (<span id="erro-...">).
+   Enquanto estiver vazio, some e não ocupa espaço. */
+span[id^="erro-"] {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cor-erro);
+}
+span[id^="erro-"]:empty { display: none; }
+
+/* Dica fixa embaixo do campo (<small id="dica-..."> ou "regras-...") */
+small {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--cor-texto-suave);
+}
+
+/* Mensagem geral do formulário (<div role="alert" hidden>).
+   O JS escreve o texto e tira o hidden. Por padrão é de erro. */
+[role="alert"] {
+  padding: 10px 14px;
+  border-radius: var(--raio);
+  color: var(--cor-erro);
+  background: var(--cor-erro-fundo);
+  font-weight: 600;
+}
+/* Variante de sucesso: o JS acrescenta a classe "sucesso" quando
+   a operação dá certo (ex.: "Ciência registrada"). O texto continua
+   dizendo o resultado, então a cor nunca é a única pista. */
+[role="alert"].sucesso {
+  color: var(--cor-sucesso-texto);
+  background: var(--cor-sucesso-fundo);
+}
+
+/* Grupos de campos: <fieldset> com <legend> */
+fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;                     /* sem isso o fieldset pode estourar a largura no celular */
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-cartao);
+}
+legend {
+  padding: 0 8px;
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+}
+
+/* ---------- Checkbox e botão de rádio ----------
+   Ficam pequenos e ao lado do rótulo. O rótulo é clicável e tem
+   pelo menos 44px de altura. (Aqui o rótulo usa peso 400, para
+   diferenciar de "rótulo de campo", que é em negrito.) */
+input[type="checkbox"],
+input[type="radio"] {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  accent-color: var(--cor-primaria);
+}
+
+/* <div> que contém um checkbox/rádio: linha com [caixa] [texto] */
+div:has(> input[type="checkbox"]),
+div:has(> input[type="radio"]) {
+  display: flex;
+  flex-wrap: wrap;                  /* a mensagem de erro cai para a linha de baixo */
+  align-items: center;
+  gap: 0 12px;
+}
+input[type="checkbox"] + label,
+input[type="radio"] + label {
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 44px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+}
+/* Erro de checkbox/rádio ocupa a linha inteira embaixo */
+div:has(> input[type="checkbox"]) > span[id^="erro-"] { flex-basis: 100%; }
+
+/* Lista de tags (professor e admin): as caixas ficam lado a lado
+   e quebram de linha quando faltar espaço. O JS cria os checkboxes. */
+#lista-tags,
+#lista-vinculos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+}
+#lista-tags input[type="checkbox"] + label,
+#lista-vinculos input[type="checkbox"] + label { flex: 0 1 auto; }
+#lista-vinculos > p { color: var(--cor-texto-suave); }
+#lista-tags > p { color: var(--cor-texto-suave); }
+
+/* ---------- Formulários de filtro (role="search") ----------
+   Celular: campos em coluna. Computador (seção 16): em linha. */
+#form-filtro-status { gap: 6px; }             /* rótulo colado no select */
+#form-filtro-status > button { margin-top: 10px; }
+
+
+/* ============================================================
+   8. BOTÕES
+   ============================================================ */
+
+/* Base = botão NEUTRO (transparente, borda de campo). É o visual do
+   "Limpar filtros" (type="reset") e dos botões da paginação. */
+button {
+  min-height: 44px;                 /* área de toque */
+  padding: 8px 20px;
+  color: var(--cor-texto);
+  background: transparent;
+  border: 1px solid var(--cor-borda-campo);
+  border-radius: var(--raio);
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+button:hover:not(:disabled) { background: var(--cor-creme); }
+
+/* Botão PRINCIPAL: todo submit (Entrar, Filtrar, Enviar para revisão...) */
+button[type="submit"] {
+  color: #FFFFFF;
+  background: var(--cor-primaria);
+  border-color: var(--cor-primaria);
+}
+button[type="submit"]:hover:not(:disabled) {
+  background: var(--cor-primaria-escura);
+  border-color: var(--cor-primaria-escura);
+}
+
+/* Botão SECUNDÁRIO: "Salvar rascunho" e "Baixar em PDF" (fundo branco,
+   borda de 2px e texto na cor primária). Vem DEPOIS do principal
+   de propósito: o "Salvar rascunho" também é type="submit". */
+button[value="rascunho"],
+#botao-pdf,
+.botao-secundario,
+button[type="submit"][value="rascunho"] {
+  color: var(--cor-primaria);
+  background: var(--cor-superficie);
+  border: 2px solid var(--cor-primaria);
+}
+button[value="rascunho"]:hover:not(:disabled),
+#botao-pdf:hover:not(:disabled),
+.botao-secundario:hover:not(:disabled),
+button[type="submit"][value="rascunho"]:hover:not(:disabled) {
+  color: var(--cor-primaria-escura);
+  background: var(--cor-info-fundo);
+  border-color: var(--cor-primaria-escura);
+}
+
+/* Botão DESABILITADO (enviando, primeira página da paginação...) */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* No celular, botões de formulário ocupam a largura toda.
+   (Botões da paginação e do cabeçalho não estão em <form>.) */
+form button { width: 100%; }
+
+/* Par de botões do formulário do professor (Salvar rascunho / Enviar):
+   o <div> (dentro de um <form>) que contém botões vira uma linha com
+   espaço entre eles. O "form" no início do seletor evita pegar a
+   <div> do cabeçalho, que também tem um botão (o Sair). */
+form div:has(> button) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+form div:has(> button) > button { flex: 1 1 200px; }
+
+
+/* ============================================================
+   9. TABELAS
+   ============================================================ */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  /* No CELULAR a tabela vira um bloco com rolagem lateral, para não
+     estourar a largura da página. Só a tabela rola, a página não. */
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+caption {
+  text-align: left;
+  padding-bottom: 8px;
+  font-size: 14px;
+  color: var(--cor-texto-suave);
+}
+/* No CELULAR a tabela rola de lado, mas nada mostrava isso e as
+   colunas da direita (inclusive "Ver relatório") ficavam escondidas
+   (análise de usabilidade, heurística 7). O aviso abaixo aparece só
+   no celular; no computador ele é removido (seção 16). */
+caption::after {
+  content: " · Arraste a tabela para o lado para ver todas as colunas →";
+  font-weight: 600;
+}
+
+/* Cabeçalho: 13px, maiúsculas, espaçado, texto suave, linha de 2px embaixo */
+th {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--cor-texto-suave);
+  border-bottom: 2px solid var(--cor-borda);
+}
+
+td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+/* Linhas alternadas (zebra) ajudam a acompanhar a linha com o olho */
+tbody tr:nth-child(even) { background: var(--cor-creme); }
+
+/* Linha de "Carregando...", "Nenhum resultado" ou mensagem de erro:
+   a célula ocupa todas as colunas (colspan). O JS acrescenta a classe
+   "erro" quando a API falha. */
+td[colspan] {
+  text-align: center;
+  color: var(--cor-texto-suave);
+  /* No CELULAR a tabela é mais larga que a tela (ela rola de lado) e
+     esta célula ocupa TODAS as colunas: a mensagem ficaria cortada,
+     fora da área visível. Por isso, no celular, a célula vira um bloco
+     com largura igual à da tela (menos as margens do cartão),
+     e o texto quebra em linhas. No computador volta ao normal (seção 16). */
+  display: block;
+  width: calc(100vw - 100px);
+  white-space: normal;
+}
+td[colspan].erro {
+  color: var(--cor-erro);
+  font-weight: 600;
+}
+
+/* Links da coluna "Ações": área de toque de 44px sem aumentar a linha */
+td a {
+  display: inline-block;
+  padding: 10px 0;
+  margin: -10px 0;
+  white-space: nowrap;
+}
+
+/* Resumo acima das tabelas ("12 relatórios encontrados") */
+#resumo-resultados,
+#resumo-turma { color: var(--cor-texto-suave); }
+
+
+/* ============================================================
+   10. ETIQUETAS DE STATUS
+   Os nomes das classes batem com o ENUM "status" do banco. No JS:
+     span.className = 'status status--' + acompanhamento.status;
+   O texto da etiqueta sempre acompanha a cor.
+   ============================================================ */
+.status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;             /* formato de pílula */
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.status--rascunho        { color: #4A515E; background: #ECEDEF; }
+.status--enviado_revisao { color: #1E4D8C; background: #E3ECF8; }
+.status--em_revisao      { color: #5E3791; background: #EFE7F8; }
+.status--publicado       { color: #1B6B43; background: #E2F3EA; }
+.status--devolvido       { color: #94480A; background: #FCEBD9; }
+.status--cancelado       { color: #B3261E; background: #FBE4E2; }
+
+
+/* ============================================================
+   11. PARES RÓTULO/VALOR (dl), TAGS E LISTAS
+   ============================================================ */
+
+/* <dl> com <div> dentro vira uma grade de "cartinhas" rótulo/valor.
+   Celular: 1 coluna. Computador: 3 colunas (seção 16). */
+dl {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin: 0;
+}
+dl > div {
+  padding: 12px 16px;
+  background: var(--cor-fundo);
+  border-radius: var(--raio);
+}
+dt {
+  font-size: 13px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--cor-texto-suave);
+}
+dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Tags do relatório: pílulas com borda de campo e fundo creme */
+#relatorio-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#relatorio-tags li {
+  padding: 4px 12px;
+  background: var(--cor-creme);
+  border: 1px solid var(--cor-borda-campo);
+  border-radius: 999px;
+  font-size: 15px;
+}
+
+/* Listas de dados que o JS preenche (alunos, turmas, alunos vinculados):
+   cada <li> vira uma linha-cartão com o texto e o link de ação. */
+#lista-alunos,
+#lista-turmas,
+#conta-alunos,
+#conta-turmas {
+  display: grid;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#lista-alunos li,
+#lista-turmas li,
+#conta-alunos li,
+#conta-turmas li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 12px 16px;
+  background: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+}
+#lista-alunos a,
+#lista-turmas a {
+  display: inline-block;
+  padding: 10px 0;
+  margin: -10px 0;
+  font-weight: 600;
+}
+
+/* Listas comuns de texto (ex.: privacidade/LGPD): marcadores normais
+   e um respiro entre os itens. (As listas com id acima ficam de fora.) */
+main section > ul:not([id]) { padding-left: 20px; }
+main section > ul:not([id]) li + li { margin-top: 8px; }
+
+
+/* ============================================================
+   12. BLOCOS ESPECIAIS
+   ============================================================ */
+
+/* Período de digitação (professor): faixa informativa azul-clara */
+#periodo-digitacao {
+  padding: 12px 16px;
+  background: var(--cor-info-fundo);
+  border: 1px solid var(--cor-info-borda);
+  border-radius: var(--raio);
+  font-weight: 600;
+}
+
+/* Ajustes solicitados (professor): aparece só quando o status é
+   "devolvido" (o JS tira o hidden). Tom de laranja, igual ao status. */
+#bloco-devolucao {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--cor-aviso-fundo);
+  border: 1px solid var(--cor-aviso-borda);
+  border-radius: var(--raio);
+}
+#bloco-devolucao h3 { color: var(--cor-aviso-texto); }
+#bloco-devolucao p { margin-top: 8px; }
+
+/* Resumo do admin: números grandes em fonte de título */
+section[aria-labelledby="titulo-resumo"] dd {
+  font-family: var(--fonte-titulo);
+  font-size: 28px;                  /* 36px no computador */
+  line-height: 1.15;
+}
+/* "Aguardando revisão" (2º item) em destaque: fundo azul, texto claro.
+   Contraste: branco e #DCE6F4 sobre a cor primária passam de 4,5:1. */
+section[aria-labelledby="titulo-resumo"] dl > div:nth-child(2) {
+  background: var(--cor-primaria);
+  color: #FFFFFF;
+}
+section[aria-labelledby="titulo-resumo"] dl > div:nth-child(2) dt {
+  color: var(--cor-menu-inativo);
+}
+
+
+/* ============================================================
+   13. PAGINAÇÃO
+   <nav aria-label="Paginação ..."> com Anterior / Página X de Y / Próxima
+   ============================================================ */
+nav[aria-label^="Paginação"] {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;        /* alinhada à direita */
+  gap: 12px;
+  margin-top: 16px;
+}
+nav[aria-label^="Paginação"] span { color: var(--cor-texto-suave); }
+
+
+/* ============================================================
+   14. PÁGINA DE LOGIN
+   Reconhecida por conter #form-login. (O <header> do login fica
+   DENTRO do <main>, por isso não recebe o estilo da faixa azul.)
+   ============================================================ */
+
+/* Coluna estreita, centralizada na tela */
+#root:has(#form-login) > main {
+  max-width: 400px;
+  margin: auto;                     /* auto nos 4 lados: centraliza também na vertical */
+  justify-content: center;
+}
+
+/* Título "KFKA" + subtítulo acima do cartão */
+#root:has(#form-login) main > header { text-align: center; }
+#root:has(#form-login) main > header h1 {
+  font-size: 40px;
+  letter-spacing: 0.06em;
+  color: var(--cor-primaria);
+}
+#root:has(#form-login) main > header p {
+  margin-top: 8px;
+  color: var(--cor-texto-suave);
+}
+
+/* O próprio formulário é o cartão branco, com sombra
+   (a sombra só existe aqui, no login) */
+#form-login {
+  padding: 24px;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-cartao);
+  box-shadow: var(--sombra);
+}
+#form-login h2 { margin: 0; }
+#botao-entrar { width: 100%; }
+
+
+/* ============================================================
+   15. PÁGINA 404
+   Reconhecida por NÃO ter cabeçalho de menu e NÃO ter o form de login.
+   O conteúdo fica centralizado na vertical e na horizontal.
+   ============================================================ */
+#root:not(:has(> header, #form-login)) > main {
+  max-width: 640px;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+}
+
+/* 1º parágrafo: o nome do sistema */
+#root:not(:has(> header, #form-login)) > main > p:first-child {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: 0.06em;
+  color: var(--cor-primaria);
+}
+
+/* 2º parágrafo: "Erro 404" grande. O clamp() faz o tamanho
+   variar com a largura da tela (mínimo 56px, máximo 120px),
+   para não estourar no celular. */
+#root:not(:has(> header, #form-login)) > main > p:nth-child(2) {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: clamp(56px, 16vw, 120px);
+  line-height: 1;
+  color: var(--cor-primaria);
+}
+
+#root:not(:has(> header, #form-login)) > main > p:nth-child(4) {
+  max-width: 48ch;                  /* linha curta é mais fácil de ler */
+  color: var(--cor-texto-suave);
+}
+
+
+/* ============================================================
+   16. TELAS MAIORES (tablet e computador)
+   Único ponto de quebra do projeto: 768px.
+   Tudo acima é "celular"; daqui para baixo, o que muda no computador.
+   ============================================================ */
+@media (min-width: 768px) {
+
+  h1 { font-size: 34px; }
+
+  /* Cabeçalho: uma linha só, com 68px de altura e margem lateral de 40px */
+  #root > header {
+    flex-wrap: nowrap;
+    gap: 8px 24px;
+    padding: 8px 40px;
+    min-height: 68px;
+  }
+  #root > header > p,
+  #root > header > nav,
+  #root > header > div { order: 0; }
+  #root > header > nav { flex: 1 1 auto; min-width: 0; }  /* o menu ocupa o meio e quebra por dentro se faltar espaço */
+  #root > header > div { flex: none; margin-left: 0; }
+
+  /* Conteúdo: margens de 40px e 28px entre as seções */
+  main {
+    padding: 28px 40px 48px;
+    gap: 28px;
+  }
+  main section,
+  main article { padding: 24px; }
+  fieldset { padding: 24px; }
+  footer { padding: 16px 40px; }
+
+  /* Login e 404 não devem herdar a margem lateral grande */
+  #root:has(#form-login) > main,
+  #root:not(:has(> header, #form-login)) > main { padding: 32px 16px; }
+
+  /* Grades de rótulo/valor: 3 colunas (o resumo do admin usa 4) */
+  dl { grid-template-columns: repeat(3, 1fr); }
+  section[aria-labelledby="titulo-resumo"] dl { grid-template-columns: repeat(4, 1fr); }
+  section[aria-labelledby="titulo-resumo"] dd { font-size: 36px; }
+
+  /* Botões voltam ao tamanho do texto (no celular ocupam a largura toda) */
+  form button { width: auto; }
+  #botao-entrar { width: 100%; }    /* exceto o do login, que continua largo */
+  form div:has(> button) > button { flex: 0 0 auto; }
+  /* Botão solto no fim do formulário (ex.: "Confirmar decisão"):
+     tamanho do texto, alinhado à esquerda, em vez de esticar. */
+  form:not([role="search"]):not(#form-login) > button { align-self: flex-start; }
+
+  /* Formulários de filtro: campos lado a lado, botões no fim da linha */
+  form[role="search"] {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  form[role="search"] > div { flex: 1 1 160px; }
+  form[role="search"] > button { flex: none; }
+
+  /* Filtro do professor (rótulo + select + botão soltos, sem <div>) */
+  #form-filtro-status { gap: 16px; align-items: center; }
+  #form-filtro-status > label { margin: 0; }
+  #form-filtro-status > select { flex: 1 1 220px; max-width: 320px; }
+  #form-filtro-status > button { margin-top: 0; }
+
+  /* Tabelas voltam a ser tabelas normais, com 100% da largura */
+  table { display: table; overflow-x: visible; }
+  caption::after { content: none; }
+  td[colspan] { display: table-cell; width: auto; }
+}
+
+
+/* ============================================================
+   17. MOVIMENTO REDUZIDO (acessibilidade)
+   Quem configurou o sistema para evitar animações não vê as
+   transições dos botões.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+
+/* Texto só para leitor de tela: existe para acessibilidade (ex.: o
+   <label> de um campo dentro de uma tabela, onde o cabeçalho da
+   coluna já explica o campo para quem enxerga). */
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   18. IMPRESSÃO / PDF (RF09)
+   O botão "Baixar em PDF" do relatório chama window.print(). Na
+   janela de impressão, o responsável escolhe "Salvar como PDF".
+   Estas regras escondem o que não faz parte do relatório (menu,
+   trilha, botões, formulário de ciência) e tiram as cores de fundo.
+   ============================================================ */
+@media print {
+  #root > header,
+  footer,
+  nav,
+  button,
+  form,
+  .nao-imprimir { display: none !important; }
+
+  body,
+  main section,
+  main article,
+  dl > div { background: #FFFFFF !important; }
+
+  main { padding: 0; max-width: none; }
+  main article { border: 0; padding: 0; }
+  dl { grid-template-columns: repeat(3, 1fr); }
+  #relatorio-tags li { border-color: #000000; }
+}

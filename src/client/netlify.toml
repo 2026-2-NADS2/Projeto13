@@ -1,0 +1,21 @@
+# ============================================================
+# netlify.toml - configuração do front no Netlify (Aula 13)
+# Este arquivo fica DENTRO de src/client/. No painel do Netlify,
+# configure "Base directory" = src/client. Os caminhos abaixo são
+# relativos a essa pasta.
+# ============================================================
+
+[build]
+  command = "npm run build"   # o Vite gera o site pronto em dist/
+  publish = "dist"            # pasta que o Netlify publica
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Qualquer endereço devolve o index.html e o React Router escolhe a
+# tela. Sem isto, F5 em /responsavel/relatorios dá o 404 do Netlify.
+# (O public/_redirects faz a mesma coisa; ter os dois não atrapalha.)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -1,0 +1,52 @@
+# ============================================================
+# render.yaml - "Blueprint" do Render (Aula 13)
+# Descreve o serviço da API para o Render criar com as configurações
+# certas. Também dá para criar o Web Service "na mão" no painel com
+# os mesmos valores (o README explica os dois jeitos).
+#
+# As variáveis marcadas com "sync: false" NÃO têm valor aqui de
+# propósito: são credenciais, e credenciais nunca vão para o GitHub.
+# O Render pede o valor de cada uma na hora de criar o serviço.
+# ============================================================
+services:
+  - type: web
+    name: kfka-api
+    runtime: node
+    plan: free
+    rootDir: src/server             # a API mora em src/server/ no repositório
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/saude     # o Render confere se a API e o banco estão no ar
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # Banco MySQL gerenciado (Railway): preencha no painel com os
+      # dados da aba "Connect" > "Public Network" do Railway.
+      # ATENÇÃO: use o endereço PÚBLICO (algo.proxy.rlwy.net), e não
+      # o "mysql.railway.internal", que só funciona dentro do Railway.
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      # Como no starter da Aula 13: o nome do banco vem do painel.
+      # No KFKA é "kfka" (o schema.sql cria esse banco).
+      - key: DB_NAME
+        sync: false
+      # O Railway não exige SSL com certificado. (Se um dia trocarem
+      # para um provedor que exija, como o Aiven, mude para "true" e
+      # crie a variável DB_SSL_CA com o certificado.)
+      - key: DB_SSL
+        value: "false"
+      # O Render gera sozinho um texto longo e aleatório para o JWT.
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRA
+        value: 2h
+      # URL do site no Netlify (sem barra no final). Pode ficar vazia
+      # no primeiro deploy e ser preenchida depois que o Netlify der a URL.
+      - key: CORS_ORIGIN
+        sync: false

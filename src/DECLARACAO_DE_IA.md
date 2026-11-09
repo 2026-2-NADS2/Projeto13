@@ -54,21 +54,21 @@
 | **Trechos ou entregas afetadas** | `src/server/modelos/FluxoAcompanhamento.js`; pasta `Documentos/Entrega 2/Programação Orientada a Objetos` (`src/core/SistemaKFKA.js`, `src/core/Autenticador.js`, `src/models/Ciencia.js`, `src/repositories/`, `src/routes/index.js`, `src/config/database.js`, `scripts/criarBanco.js`, `README.md`). |
 ### Módulo do sistema 5
 
-| **Aluno(s) Responsável(veis)** | [preencher] |
+| **Aluno(s) Responsável(veis)** | Enzo Mancio Vaz |
 | :--- | :--- |
 | **Ferramenta utilizada** | Claude (Anthropic), pelo site claude.ai |
 | **Versão/modelo** | Claude Opus 5.5 |
-| **Disciplina / Trabalho** |  |
-| **Finalidade de uso** |  |
-| ***Prompts* principais utilizados** | [preencher] |
-| **Trechos ou entregas afetadas** |  |
+| **Disciplina / Trabalho** | Estrutura de Dados |
+| **Finalidade de uso** | Adaptar nossa estrutura de banco de dados (MySQL) para outra estrutura (SQLite), e dar a devida finalidade aos requisitos da matéria.|
+| ***Prompts* principais utilizados** | Adaptação do meu banco de dados para sintaxes do SQLite, e ideias para conseguir realizar a entrega com um código mais curto. |
+| **Trechos ou entregas afetadas** |   |
 
 ## Entrega 2
 <br><br>
 
 ### Módulo do sistema 1
 
-| **Aluno(s) Responsável(veis)** | André Seiji Shiroma, Enzo Mancio |
+| **Aluno(s) Responsável(veis)** | André Seiji Shiroma, Enzo Mancio Vaz|
 | :--- | :--- |
 | **Ferramenta utilizada** | Claude (Anthropic), pelo site claude.ai |
 | **Versão/modelo** | Claude Opus 5.5 |

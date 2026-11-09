@@ -4,7 +4,7 @@
 
 **Responsáveis:** André Seiji Shiroma e Enzo Mancio
 
-Na Entrega 2 o KFKA ganhou o back-end completo (API em Node.js + Express + MySQL, com login e rotas protegidas), o front-end passou para React e o sistema foi publicado na nuvem.
+Na Entrega 2 o KFKA ganhou o back-end completo (API em Node.js + Express + MySQL, com login e rotas protegidas), o front-end passou para React conforme o feedback do professor dado pelo Gamefy, e o sistema foi publicado na nuvem.
 
 ## 🌐 Sistema publicado
 
@@ -23,18 +23,9 @@ Na Entrega 2 o KFKA ganhou o back-end completo (API em Node.js + Express + MySQL
 | Professor | carla.lima@escola-teste.com |
 | Responsável | mariana.souza@exemplo.com |
 
-## 📁 O que está nesta pasta
-
-| Arquivo | O que é |
-|---|---|
-| `KFKA-E2-WebFullStack.zip` | Projeto completo: `banco/`, `server/` (API), `client/` (React) e o `README.md` técnico |
-| `schema.sql` | Cria o banco `kfka`: tabelas, índices e a view `vw_relatorio_publicado` |
-| `seed.sql` | Dados **fictícios** para teste e demonstração |
-| `README.md` | Este arquivo |
 
 > 📌 **O `schema.sql` e o `seed.sql` também estão dentro do zip** (na pasta `src/banco/`). Deixamos uma cópia separada aqui para facilitar a consulta, sem precisar descompactar. As duas cópias são idênticas e são as mesmas usadas no banco publicado.
 
-O mesmo código está aberto, com o histórico de commits, na pasta [`src/`](<../../../src>) da raiz deste repositório. O [`src/README.md`](<../../../src/README.md>) traz os detalhes técnicos: estrutura, rotas da API, segurança e o passo a passo completo do deploy.
 
 ## ✅ Critérios da Entrega 2 e onde encontrá-los
 
@@ -59,7 +50,7 @@ Site (React)  ──▶  API (Express)  ──▶  Banco (MySQL)
   Netlify           Render              Railway
 ```
 
-- **Banco no Railway, e não no Aiven:** o Aiven parou de criar bancos MySQL gratuitos em 06/11/2026.
+- **Banco no Railway, e não no Aiven:** o Aiven parou de criar bancos MySQL gratuitos.
 - **A API usa um usuário de banco só dela (`kfka_app`)**, que pode ler e gravar dados, mas não pode apagar tabelas (princípio do menor privilégio).
 - **O deploy sai de um repositório espelho.** Para o Render e o Netlify lerem um repositório da organização da FECAP, um administrador da organização precisa aprovar o acesso. O pedido ficou pendente, então criamos um **espelho privado** deste repositório na conta pessoal de um integrante, usado só como origem do deploy. O código é o mesmo: os dois repositórios recebem os mesmos commits, com os mesmos identificadores (hash).
 
@@ -85,7 +76,3 @@ cd client
 npm install
 npm run dev              # http://localhost:5173
 ```
-
-## 🤖 Uso de Inteligência Artificial
-
-O uso de IA nesta entrega está registrado na **Declaração de Uso de IA** da pasta `Documentos`, conforme o Guia para o Uso Responsável de IA na FECAP.

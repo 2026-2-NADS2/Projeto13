@@ -70,6 +70,14 @@ app.get('/api/saude', async (req, res) => {
   await pool.query('SELECT 1');
   res.json({ ok: true });
 });
+// Página inicial da API: quem abrir o endereço "puro" no navegador
+// vê que a API está no ar e onde testar (igual ao starter da Aula 13).
+app.get('/', (req, res) => {
+  res.json({
+    mensagem: 'API da KFKA - Plataforma de Acompanhamento Escolar no ar.',
+    saude: '/api/saude',
+  });
+});
 
 app.use('/api', rotasConta);                     // /api/login, /api/conta...
 app.use('/api', rotasGerais);                    // /api/tags, /api/bimestres

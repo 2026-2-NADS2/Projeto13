@@ -60,8 +60,8 @@
 | **Versão/modelo** | Claude Opus 5.5 |
 | **Disciplina / Trabalho** | Estrutura de Dados |
 | **Finalidade de uso** | Adaptar nossa estrutura de banco de dados (MySQL) para outra estrutura (SQLite), e dar a devida finalidade aos requisitos da matéria.|
-| ***Prompts* principais utilizados** | Adaptação do meu banco de dados para sintaxes do SQLite, e ideias para conseguir realizar a entrega com um código mais curto. |
-| **Trechos ou entregas afetadas** |   |
+| ***Prompts* principais utilizados** | "Adapte meu banco de dados em SQL para sintaxes do SQLite", "Qual sintaxe para tal funcionalidade?" e "Qual o erro neste trecho de código?" |
+| **Trechos ou entregas afetadas** | `Program.cs` (programa principal) ; `Aluno.cs` ; `AlunoDB.cs` (banco adaptado) |
 
 ## Entrega 2
 <br><br>

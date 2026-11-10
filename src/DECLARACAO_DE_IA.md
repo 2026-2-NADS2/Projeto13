@@ -42,7 +42,7 @@
 | ***Prompts* principais utilizados** | Pedidos para sugerir uma paleta de cores acessível para o KFKA, verificar o contraste entre as cores e sugerir fontes e regras para botões e campos. |
 | **Trechos ou entregas afetadas** | Documento "KFKA – Guia de estilo". |
 
-### Módulo do sistema 3
+### Módulo do sistema 4
 
 | **Aluno(s) Responsável(veis)** | Marcos Almeida Daloia |
 | :--- | :--- |
@@ -109,6 +109,17 @@
 | **Finalidade de uso** | Orientação passo a passo de como usar o Figma (quadros, textos, setas e ligações do protótipo); sugestão da estrutura do mapa de navegação, da Tela inicial e das partes do Design System (cores dos status, escala de tipografia, espaçamentos, cantos e ícones); escrita do texto da Brand Persona (Kika); geração das ilustrações da Kika e das personas. A montagem no Figma foi feita pelo grupo, e as telas já existentes foram mantidas, mudando só as cores para o padrão do Guia de Estilo. As imagens geradas por IA estão identificadas no arquivo. |
 | ***Prompts* principais utilizados** | Pedidos de explicação passo a passo de como montar cada parte no Figma; pedido para escrever o texto da Brand Persona; pedidos de ajuda para criar o mapa de navegação, a Tela inicial e o Design System. |
 | **Trechos ou entregas afetadas** | Arquivo Figma "Nova Stark": páginas Mapa de navegação, Protótipo (Tela inicial e ligações entre as telas), design System, Brand Persona e Persona; pasta `Documentos/Entrega 2/Design de Interface Digital` (PDF exportado). |
+
+### Módulo do sistema 5
+
+| **Aluno(s) Responsável(veis)** | Enzo Mancio Vaz |
+| :--- | :--- |
+| **Ferramenta utilizada** | Nenhuma I.A utilizada para esta entrega em específico. |
+| **Versão/modelo** |  |
+| **Disciplina / Trabalho** | Estrutura de Dados - Entrega 2 |
+| **Finalidade de uso** | |
+| ***Prompts* principais utilizados** |  |
+| **Trechos ou entregas afetadas** | |
 
 ***Declaro que o uso acima descrito está em conformidade com o GUIA PARA O USO RESPONSÁVEL DE
 INTELIGÊNCIA ARTIFICIAL NA FECAP e que o conteúdo final é de minha plena responsabilidade

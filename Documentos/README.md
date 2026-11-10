@@ -53,16 +53,16 @@
 | ***Prompts* principais utilizados** | — |
 | **Trechos ou entregas afetadas** | — |
 
-### Disciplina 5
+### Módulo do sistema 5
 
-| **Aluno(s) Responsável(veis)** | [preencher] |
+| **Aluno(s) Responsável(veis)** | Enzo Mancio Vaz |
 | :--- | :--- |
-| **Ferramenta utilizada** | [preencher] |
-| **Versão/modelo** | [preencher] |
+| **Ferramenta utilizada** | Claude (Anthropic), pelo site claude.ai |
+| **Versão/modelo** | Claude Opus 5.5 |
 | **Disciplina / Trabalho** | Estrutura de Dados |
-| **Finalidade de uso** | [preencher] |
-| ***Prompts* principais utilizados** | [preencher] |
-| **Trechos ou entregas afetadas** | [preencher] |
+| **Finalidade de uso** | Adaptar nossa estrutura de banco de dados (MySQL) para outra estrutura (SQLite), e dar a devida finalidade aos requisitos da matéria.|
+| ***Prompts* principais utilizados** | "Adapte meu banco de dados em SQL para sintaxes do SQLite", "Qual sintaxe para tal funcionalidade?" e "Qual o erro neste trecho de código?" |
+| **Trechos ou entregas afetadas** | `Program.cs` (programa principal) ; `Aluno.cs` ; `AlunoDB.cs` (banco adaptado) |
 
 
 ## Entrega 2
@@ -112,16 +112,14 @@
 | ***Prompts* principais utilizados** | "Me fala passo a passo, vamos fazendo devagar"; "Pode fazer o texto, aí você só me ensina como coloca no Figma passo a passo"; "Vamos começar a Entrega 2"; "Como faço o quadrado?" |
 | **Trechos ou entregas afetadas** | Arquivo Figma "Nova Stark": páginas Mapa de navegação, Protótipo (Tela inicial e ligações entre as telas), design System, Brand Persona e Persona (ilustrações); pasta `Documentos/Entrega 2/Design de Interface Digital` (`README.md` e PDF exportado). |
 
-### Disciplina 5
-
-| **Aluno(s) Responsável(veis)** | [preencher] |
+| **Aluno(s) Responsável(veis)** | Enzo Mancio Vaz |
 | :--- | :--- |
-| **Ferramenta utilizada** | [preencher] |
-| **Versão/modelo** | [preencher] |
-| **Disciplina / Trabalho** | Estrutura de Dados |
-| **Finalidade de uso** | [preencher] |
-| ***Prompts* principais utilizados** | [preencher] |
-| **Trechos ou entregas afetadas** | [preencher] |
+| **Ferramenta utilizada** | Nenhuma I.A utilizada para esta entrega em específico. |
+| **Versão/modelo** |  |
+| **Disciplina / Trabalho** | Estrutura de Dados - Entrega 2 |
+| **Finalidade de uso** | |
+| ***Prompts* principais utilizados** |  |
+| **Trechos ou entregas afetadas** | |
 <br><br>
 
 
